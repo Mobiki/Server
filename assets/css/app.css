@@ -1,0 +1,17 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,800,700,600);
+
+
+
+/* MAP CUSTOM STYLES */
+#map {
+  /*width: 100%;*/
+  height: 750px
+}
+
+#map path {
+  fill-opacity: .2;
+  stroke: #333;
+  stroke-opacity: 1;
+  stroke-width: 1px;
+}
+      

@@ -1,0 +1,16 @@
+{
+    "name": "hpc/mobiki.in-json",
+    "description": "Mobiki Panel",
+    "type": "project",
+    "license": "GNU3",
+    "authors": [
+        {
+            "name": "akif sever",
+            "email": "akifsever@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "predis/predis": "^2.0@dev"
+    }
+}
