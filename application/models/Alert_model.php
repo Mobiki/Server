@@ -7,7 +7,17 @@ class Alert_model extends CI_Model
         parent::__construct();
     }
 
-
+    public function redis(Type $var = null)
+    {
+        $client = new Predis\Client([
+            'scheme' => $this->config->item('redis_scheme'),
+            'host'   => $this->config->item('redis_host'),
+            'port'   => $this->config->item('redis_port'),
+            'password' => $this->config->item('redis_password')
+        ]);
+        return $client;
+    }
+    
     public function getAllAlerts(Type $var = null)
     {
         return $this->db->get("alert_rules")->result_array(); 
@@ -28,6 +38,7 @@ class Alert_model extends CI_Model
 
     public function alertClose($alertid,$devicemac)
     {
+        $client = $this->redis();
         
         $this->db->where("id",$alertid);
         $data = array(

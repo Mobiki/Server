@@ -92,16 +92,7 @@
                     </div>
                 </form>
                 <br>
-                <div class="row">
-                    <div class="col-3">
-                    </div>
-                    <div class="col-3">
 
-                    </div>
-                    <div class="col-3">
-                        <a class="btn btn-primary btn-sm" href="#" role="button" onclick="dbtest()">Update Databese Config</a>
-                    </div>
-                </div>
 
                 <hr>
                 <div class="row">
@@ -111,7 +102,7 @@
 
                     </div>
                     <div class="col-3">
-                        <a class="btn btn-primary btn-sm" href="#" role="button" onclick="start2()">Set Admin User</a>
+                        <a class="btn btn-primary btn-sm" href="#" role="button" onclick="dbtest()">Update Databese. Next: Set Admin User</a>
                     </div>
                 </div>
             </div>
@@ -128,7 +119,7 @@
                 </div>
                 <hr>
                 <br>
-                <form id="admin">
+                <form id="admin" action="config/setadmin" method="post">
                     <div class="row">
                         <div class="col-4">
                         </div>
@@ -136,7 +127,7 @@
                             Company Name
                         </div>
                         <div class="col-2">
-                            <input type="text" class="form-control" name="cname" value="" />
+                            <input type="text" class="form-control" name="cname" value="" required />
                         </div>
                         <div class="col-4">
                         </div>
@@ -149,7 +140,7 @@
                             Name Surname
                         </div>
                         <div class="col-2">
-                            <input type="text" class="form-control" name="name" value="" />
+                            <input type="text" class="form-control" name="name" value="" required />
                         </div>
                         <div class="col-4">
                         </div>
@@ -161,7 +152,7 @@
                             E-mail
                         </div>
                         <div class="col-2">
-                            <input type="text" class="form-control" name="email" value="" />
+                            <input type="text" class="form-control" name="email" type="email" value="" required />
                         </div>
                         <div class="col-4">
                         </div>
@@ -173,13 +164,15 @@
                             Password
                         </div>
                         <div class="col-2">
-                            <input type="password" class="form-control" name="password" value="" />
+                            <input type="password" class="form-control" name="password" value="" required />
                         </div>
                         <div class="col-4">
                         </div>
                     </div>
 
                     <br>
+
+                    <hr>
                     <div class="row">
                         <div class="col-3">
                         </div>
@@ -187,22 +180,11 @@
 
                         </div>
                         <div class="col-3">
-                            <a class="btn btn-primary btn-sm" href="#" role="button" onclick="setAdmin()">Set Admin</a>
+                            <button class="btn btn-primary btn-sm" href="#" type="submit" onclick="setAdmin()">Set Admin</button>
                         </div>
+                        <div id="result"></div>
                     </div>
                 </form>
-                <hr>
-                <div class="row">
-                    <div class="col-3">
-                    </div>
-                    <div class="col-3">
-
-                    </div>
-                    <div class="col-3">
-                        <a class="btn btn-primary btn-sm" href="#" role="button" onclick="start2()">Next</a>
-                    </div>
-                    <div id="result"></div>
-                </div>
             </div>
         </div>
     </div>
@@ -228,28 +210,22 @@
         $('#licence').hide();
     }
 
-    function start3() {
-        $('#jumbotron').hide();
-        $('#firstconfig').hide();
-        $('#secondconfig').hide();
-        $('#licence').show();
-    }
-
     function dbtest() {
         $.post("config/db", $("#dbform").serialize())
             .done(function(data) {
-                alert(data);
+                //alert(data);
                 //$( "#dbhost" ).val(data);
+                $('#jumbotron').hide();
+                $('#firstconfig').hide();
+                $('#secondconfig').show();
+                $('#licence').hide();
+            })
+            .fail(function() {
+                alert("Error");
             });
     }
 
-    function setAdmin() {
-        $.post("config/setadmin", $("#admin").serialize())
-            .done(function(data) {
-                alert(data);
-                //$( "#dbhost" ).val(data);
-            });
-    }
+
 </script>
 
 </html>

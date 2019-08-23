@@ -7,11 +7,11 @@ class Config extends CI_Controller
     {
         parent::__construct();
     }
-    
+
     public function index(Type $var = null)
     {
         $data = array(
-            'pageId'=>0,
+            'pageId' => 0,
             'pageName' => "Config",
         );
         $this->load->view('config', $data);
@@ -19,14 +19,16 @@ class Config extends CI_Controller
 
     public function db(Type $var = null)
     {
-        $dbname =  $this->input->post("dbname");
-        $dbusername = $this->input->post("dbusername");
-        $dbpassword = $this->input->post("dbpassword");
-        $dbhost = $this->input->post("dbhost");
+        $dbname =  $this->input->post("dbname", true);
 
-        $filename = "database.php";
-        $ourFileHandle = fopen(APPPATH . '/config/' . $filename, 'w');
-        $written =  '<?php 
+        if ($dbname != "") {
+            $dbusername = $this->input->post("dbusername");
+            $dbpassword = $this->input->post("dbpassword");
+            $dbhost = $this->input->post("dbhost");
+
+            $filename = "database.php";
+            $ourFileHandle = fopen(APPPATH . '/config/' . $filename, 'w');
+            $written =  '<?php 
 $active_group = "default";
 $query_builder = TRUE;
 
@@ -52,24 +54,37 @@ $db["default"] = array(
 	"save_queries" => TRUE
 );';
 
-        fwrite($ourFileHandle, $written); //write new db connect file
+            fwrite($ourFileHandle, $written); //write new db connect file
+            fclose($ourFileHandle); //file close
 
-        fclose($ourFileHandle); //file close
-        
 
-        try {
-            $sql = file_get_contents(APPPATH . '../openmobiki.sql');
-            $sqls = explode(';', $sql);
-            array_pop($sqls);
-    
-            foreach ($sqls as $statement) {
-                $statment = $statement . ";";
-                $this->db->query($statement);
-            }
-        } catch (\Throwable $th) {
-            //throw $th;
+            redirect("config/creatTables?dbname=" . $dbname);
         }
+    }
 
+    public function creatTables()
+    {
+        $dbname =  $this->input->get("dbname");
+
+            if ($dbname != "") {
+
+                try {
+                    $sql = file_get_contents(APPPATH . '../openmobiki.sql');
+                    $sqls = explode(';', $sql);
+
+                    foreach ($sqls as $key => $value) {
+
+                        $statment = $sqls[$key] . ";";
+                        $this->db->query($statment);
+                    }
+                } catch (Exception $e) {
+                    var_dump($e->getMessage());
+                }
+            } else {
+
+                echo ("db yok");
+            }
+        
     }
 
     public function license()
@@ -91,23 +106,25 @@ $db["default"] = array(
         $email =  $this->input->post("email");
         $password =  $this->input->post("password");
 
-        $data=array(
-            'role_id'=>1,
-            'name'=>$name,
-            'email'=>$email,
-            'password'=>md5($password . md5('4671dfb2178c8f4b231f94a2e1ae675e')),
-            'phone'=>'',
-            'description'=>'',
-            'token'=>md5( (string) time() . md5('b88d0391a211c286feee919055e7e75d')),
+        $data = array(
+            'role_id' => 1,
+            'name' => $name,
+            'email' => $email,
+            'password' => md5($password . md5('4671dfb2178c8f4b231f94a2e1ae675e')),
+            'phone' => '',
+            'description' => '',
+            'token' => md5((string) time() . md5('b88d0391a211c286feee919055e7e75d')),
         );
 
-        $this->db->insert('users',$data);
+        $this->db->insert('users', $data);
 
-        $cdata=array(
-            'name'=>$cname,
-            'token'=>'',
+        $cdata = array(
+            'name' => $cname,
+            'token' => '',
         );
 
-        $this->db->insert('company',$cdata);
+        $this->db->insert('company', $cdata);
+
+        redirect("login");
     }
 }
