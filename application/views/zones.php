@@ -6,7 +6,7 @@
 <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header py-3">
+                    <div class="card-header py-3"> 
                         <?php
                         ?>
                         <h6 class="m-0 font-weight-bold text-primary"><button type="button" data-toggle='modal' data-target='#addGatewayModal' class="btn btn-primary btn-sm">Add Zone</button> - <button type="button" class="btn btn-secondary btn-sm" onclick="sendtoredis()">Update</button> </h6>
@@ -69,7 +69,13 @@
             </div>
         </div>
 
-
-
+<div id="dv"></div>
 
 <?php $this->load->view('layout/down') ?>
+
+
+<script>
+    function sendtoredis(){
+        $("#dv").load("zones/toredis");
+    }
+</script>

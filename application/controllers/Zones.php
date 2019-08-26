@@ -24,4 +24,24 @@ class Zones extends CI_Controller
         $this->load->view("zones",$data);
     }
 
+
+    public function redis()
+    {
+        $client = new Predis\Client([
+            'scheme' => $this->config->item('redis_scheme'),
+            'host'   => $this->config->item('redis_host'),
+            'port'   => $this->config->item('redis_port'),
+            'password' => $this->config->item('redis_password')
+        ]);
+        return $client;
+    }
+
+    public function toredis(Type $var = null)
+    {
+        $client = $this->redis();
+        $zones=$this->Zones_model->getAllZones();
+        //print_r( json_decode(json_encode($gateways),true));
+        $client->set("zones",json_encode($zones));
+    }
+
 }

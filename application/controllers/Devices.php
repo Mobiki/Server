@@ -3,7 +3,6 @@
 require_once(APPPATH . '../vendor/autoload.php');
 Predis\Autoloader::register();
 
-
 class Devices extends CI_Controller
 {
 
@@ -27,12 +26,13 @@ class Devices extends CI_Controller
     public function index()
     {
         /*$client = $this->redis();
-        $userkeys = $client->keys("user:*");*/
+        $redis_devices = $client->get("devices");*/
 
         $devices=$this->Devices_model->getAll();
         $devices_type=$this->Devices_model->getDevicesType();
         $data = array(
-            'id' => '',
+            'pageId' => '5',
+            'pageName' => 'Devices',
             'devices'=>$devices,
             'devices_type'=>$devices_type,
         );
@@ -40,9 +40,8 @@ class Devices extends CI_Controller
     }
 
 
-    public function add(Type $var = null)
+    public function add()
     {
-        //`id``name``mac``description``type_id``status``update_date`
         $name = $this->input->post("name", true);
         $mac = $this->input->post("mac", true);
         $description = $this->input->post("description", true);
@@ -61,7 +60,7 @@ class Devices extends CI_Controller
         redirect('devices');
     }
 
-    public function edit(Type $var = null)
+    public function edit()
     {
         $id = $this->input->post("eid", true);
         $name = $this->input->post("ename", true);
@@ -78,13 +77,12 @@ class Devices extends CI_Controller
             'id'=>$id,
         );
 
-
         $this->db->where('id', $id);
         $this->db->update('devices', $data);
         redirect('devices');
     }
 
-    public function delete(Type $var = null)
+    public function delete()
     {
         $mac = $this->input->post("hmac", true);
         $id = $this->input->post("hid", true);
@@ -96,7 +94,7 @@ class Devices extends CI_Controller
     }
 
 
-    public function toredis(Type $var = null)
+    public function toredis()
     {
         $client = $this->redis();
         $devices=$this->Devices_model->getAll();
