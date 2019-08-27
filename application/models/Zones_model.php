@@ -18,4 +18,15 @@ class Zones_model extends CI_Model
         return $this->db->get('zone_categories')->result_array();
     }
 
+    public function addzone($name,$parent_id,$description)
+    {
+        $data = array(
+            'name' => $name,
+            'parent_id' => $parent_id,
+            'description' => $description,
+        );
+        $this->db->insert('zones',$data);
+        return true;
+    }
+
 }

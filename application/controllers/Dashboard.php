@@ -23,7 +23,7 @@ class Dashboard extends CI_Controller
             'scheme' => $this->config->item('redis_scheme'),
             'host'   => $this->config->item('redis_host'),
             'port'   => $this->config->item('redis_port'),
-            'password' => $this->config->item('redis_password')
+            'password' => $this->config->item('redis_auth')
         ]);
         return $client;
     }
@@ -423,7 +423,7 @@ die();*/
             'suspend_date' => date('Y-m-d H:i:s'),
         );
 
-        $this->Devices_model->addAlertLog($data);
+        $this->Alert_model->addAlertLog($data);
 
         $lightinfo = json_decode($client->get($lightmac), true);
         $lightinfo["status"] = 2;

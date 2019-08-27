@@ -19,14 +19,14 @@ class Gateways extends CI_Controller
             'scheme' => $this->config->item('redis_scheme'),
             'host'   => $this->config->item('redis_host'),
             'port'   => $this->config->item('redis_port'),
-            'password' => $this->config->item('redis_password')
+            'password' => $this->config->item('redis_auth')
         ]);
         return $client;
     }
 
     public function index()
     {
-        $gateways = $this->Gateways_model->getAll();
+        $gateways = $this->Gateways_model->get_all();
         $zones = $this->Zones_model->getAllZones();
 
         $data = array(
@@ -41,46 +41,38 @@ class Gateways extends CI_Controller
 
     public function detail()
     {
-        $gwmac = $this->input->get("mac");
-
-        $gateway = $this->Gateways_model->getDetail($gwmac);
-
+        $mac = $this->input->get("mac");
+        $gateway = $this->Gateways_model->get_by_mac($mac);
+        $zones = $this->Zones_model->getAllZones();
         $data = array(
-            'id' => '',
+            'pageId' => '4.1',
             'section' => 'detail',
+            'pageName' => 'Gateway Detail ',
             'gateway' => $gateway,
+            'zones' => $zones,
         );
         $this->load->view('gateways', $data);
     }
 
     public function add()
     {
-        $name = $this->input->post("name", true);
-        $zone_id = $this->input->post("zone_id", true);
-        $lat = $this->input->post("lat", true);
-        $lng = $this->input->post("lng", true);
-        $mac = $this->input->post("mac", true);
-        $description = $this->input->post("description", true);
         $data = array(
-            'name' => $name,
-            'zone_id' => $zone_id,
-            'lat' => $lat,
-            'lng' => $lng,
-            'mac' => $mac,
-            'description' => $description,
+            'name' => $this->input->post("name", true),
+            'zone_id' => $this->input->post("zone_id", true),
+            'lat' => $this->input->post("lat", true),
+            'lng' => $this->input->post("lng", true),
+            'mac' => $this->input->post("mac", true),
+            'description' => $this->input->post("description", true),
         );
-        $this->db->insert('gateways', $data);
+        
+        $this->Gateways_model->insert($data);
         redirect('gateways');
     }
 
     public function delete()
     {
-        $mac = $this->input->post("hmac", true);
         $id = $this->input->post("hid", true);
-
-        $this->db->where('id', $id);
-        $this->db->where('mac', $mac);
-        $this->db->delete('gateways');
+        $this->Gateways_model->delete($id);
         redirect('gateways');
     }
 
@@ -88,24 +80,16 @@ class Gateways extends CI_Controller
     public function edit()
     {
         $id = $this->input->post("eid", true);
-        $name = $this->input->post("ename", true);
-        $zone_id = $this->input->post("ezone_id", true);
-        $lat = $this->input->post("elat", true);
-        $lng = $this->input->post("elng", true);
-        $mac = $this->input->post("emac", true);
-        $description = $this->input->post("edescription", true);
         $data = array(
-            'name' => $name,
-            'zone_id' => $zone_id,
-            'lat' => $lat,
-            'lng' => $lng,
-            'mac' => $mac,
-            'description' => $description,
-            'id'=>$id,
+            'name' => $this->input->post("ename", true),
+            'zone_id' => $this->input->post("ezone_id", true),
+            'lat' => $this->input->post("elat", true),
+            'lng' => $this->input->post("elng", true),
+            'mac' => $this->input->post("emac", true),
+            'description' => $this->input->post("edescription", true),
         );
 
-        $this->db->where('id', $id);
-        $this->db->update('gateways', $data);
+        $this->Gateways_model->update($id, $data);
         redirect('gateways');
     }
 
@@ -113,7 +97,7 @@ class Gateways extends CI_Controller
     public function toredis(Type $var = null)
     {
         $client = $this->redis();
-        $gateways = $this->Gateways_model->getAll();
-        $client->set("gateways",json_encode($gateways));
+        $gateways = $this->Gateways_model->get_all();
+        $client->set("gateways", json_encode($gateways));
     }
 }

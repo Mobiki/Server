@@ -185,30 +185,7 @@
 <?php $this->load->view("layout/scripts"); ?>
 
 <script>
-    //window.onload = function () { 
-    // $("#dashboard").load("rtls/rtlsdashboard");
-    //}
-    //setInterval(function() {
-    //$("#dashboard").load("rtls/rtlsdashboard");
-    //}, 3000);
-
-
-    /*var jqxhr = $.getJSON("rtls/rtlsdashboard", function() {
-            console.log("success");
-            //alert(jqxhr);
-        })
-        .done(function() {
-            console.log("second success");
-        })
-        .fail(function() {
-            alert("Error");
-            console.log("error");
-        })
-        .always(function() {
-            console.log("complete");
-        });*/
-
-
+    
     setInterval(function() {
         try {
             $("#log").load("dashboard/rtls");
@@ -224,13 +201,6 @@
         }
     }, 10000);
 
-    /*$(document).ready(function() {
-        $('#dataTable').DataTable();
-    } );*/
-
-    /*var table = $('#dataTable').DataTable( {
-        ajax: "rtls/rtlstrdevices"
-    } );*/
 </script>
 
 <?php $this->load->view('layout/down'); ?>

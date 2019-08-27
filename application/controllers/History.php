@@ -30,10 +30,10 @@ class History extends CI_Controller
 
         
         $client = new Predis\Client([
-            //'scheme' => 'tcp',
+            'scheme' => $this->config->item('redis_host'),
             'host'   => $this->config->item('redis_host'),
-            //'port'   => $this->config->item('redis_port'),
-            'password' => $this->config->item('redis_password')
+            'port'   => $this->config->item('redis_port'),
+            'password' => $this->config->item('redis_auth')
         ]);
 
         $userlog = $client->zrange("log:".$getmac,0,-1,array('withscores' => true));
@@ -53,10 +53,10 @@ class History extends CI_Controller
         $getmac=$this->input->get("mac");
 
         $client = new Predis\Client([
-            //'scheme' => 'tcp',
+            'scheme' => $this->config->item('redis_scheme'),
             'host'   => $this->config->item('redis_host'),
-            //'port'   => $this->config->item('redis_port'),
-            'password' => $this->config->item('redis_password')
+            'port'   => $this->config->item('redis_port'),
+            'password' => $this->config->item('redis_auth')
         ]);
 
         $userlog = $client->zrange("log:".$getmac,0,-1,array('withscores' => true));

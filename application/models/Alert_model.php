@@ -13,9 +13,14 @@ class Alert_model extends CI_Model
             'scheme' => $this->config->item('redis_scheme'),
             'host'   => $this->config->item('redis_host'),
             'port'   => $this->config->item('redis_port'),
-            'password' => $this->config->item('redis_password')
+            'password' => $this->config->item('redis_auth')
         ]);
         return $client;
+    }
+    
+    public function addAlertLog($data)
+    {
+        $this->db->insert("alert_logs",$data);
     }
     
     public function getAllAlerts(Type $var = null)

@@ -10,16 +10,19 @@ class Personnel extends CI_Controller
     {
         parent::__construct();
         //$this->load->model("Personnel_model");
+        $this->load->model("Devices_model");
     }
 
 
     public function index()
     {
-        //$devices=$this->Devices_model->getAll();
-        //$devices_type=$this->Devices_model->getDevicesType();
+        $devices = $this->Devices_model->get_all();
+        $devices_type = $this->Devices_model->get_all_device_type();
         $data = array(
             'pageId' => '7',
             'pageName' => 'Personnel',
+            'devices' => $devices,
+            'devices_type' => $devices_type,
         );
         $this->load->view('personnel', $data);
     }

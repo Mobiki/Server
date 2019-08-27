@@ -21,16 +21,16 @@ class Alert extends CI_Controller
             'scheme' => $this->config->item('redis_scheme'),
             'host'   => $this->config->item('redis_host'),
             'port'   => $this->config->item('redis_port'),
-            'password' => $this->config->item('redis_password')
+            'password' => $this->config->item('redis_auth')
         ]);
         return $client;
     }
 
     public function index()
     {
-        $devices=$this->Devices_model->getAllSensors();
+        $devices=$this->Devices_model->get_all();
         $alert_rules=$this->Alert_model->getAllAlerts();
-        $devices_type=$this->Devices_model->getDevicesType();
+        $devices_type=$this->Devices_model->get_all_device_type();
         $data=array(
             'id'=>'',
             'page'=>'alert',

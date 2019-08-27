@@ -16,8 +16,7 @@
             <div class="container-fluid">
                 <!-- Page Content -->
 
-                <br>
-asdasda
+
             </div>
             <!-- /.container-fluid -->
 
