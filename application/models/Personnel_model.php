@@ -1,20 +1,13 @@
 <?php
 
-class Gateways_model extends CI_Model
+class Personnel_model extends CI_Model
 {
-    protected $table = 'gateways';
+    protected $table = 'personnel';
 
     function __construct()
     {
         parent::__construct();
     }
-    
-    //get_all
-    //get_by_id
-    //get_where
-    //insert
-    //update
-    //delete
 
     public function get_all()
     {
@@ -26,13 +19,6 @@ class Gateways_model extends CI_Model
     public function get_by_id($id)
     {
         return $this->db->get_where($this->table, array('id' => $id))
-            ->result_array();
-        //->row();
-    }
-
-    public function get_by_mac($mac)
-    {
-        return $this->db->get_where($this->table, array('mac' => $mac))
             ->result_array();
         //->row();
     }

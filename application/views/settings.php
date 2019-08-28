@@ -21,42 +21,42 @@
             </p>
             <br>
             <form method="post" action="settings/redisSetting">
-            <div class="row">
-                <div class="col-1">Enable</div>
-                <div class="col-2" style="text-align: center;"><input class="form-check-input" type="checkbox" name="redis_status" <?php
-                                                                                                                if ($this->config->item('redis_status') == true) {
-                                                                                                                    echo "checked";
-                                                                                                                }
-                                                                                                                if ($this->config->item('redis_status') == false) {
-                                                                                                                    echo "";
-                                                                                                                }
-                                                                                                                ?> /></div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-1">Host</div>
-                <div class="col-2"><input class="form-control" type="text" name="redis_host" value="<?php echo @$this->config->item('redis_host'); ?>" required/></div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-1">Port</div>
-                <div class="col-2"><input class="form-control" type="number" name="redis_port" value="<?php echo @$this->config->item('redis_port'); ?>" required/></div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-1">Auth</div>
-                <div class="col-2"><input class="form-control" type="text" name="redis_auth" value="<?php echo @$this->config->item('redis_auth'); ?>" /></div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-1">Scheme</div>
-                <div class="col-2"><input class="form-control" type="text" name="redis_scheme" value="<?php echo @$this->config->item('redis_scheme'); ?>" required/></div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-1" id="redistest"><button type="button" class="btn btn-primary btn-sm" onclick="redistest()">Test</button></div>
-                <div class="col-2" style="text-align: center;"><button type="submit" class="btn btn-primary btn-sm">Save</button></div>
-            </div>
+                <div class="row">
+                    <div class="col-1">Enable</div>
+                    <div class="col-2" style="text-align: center;"><input class="form-check-input" type="checkbox" name="redis_status" <?php
+                                                                                                                                        if ($this->config->item('redis_status') == true) {
+                                                                                                                                            echo "checked";
+                                                                                                                                        }
+                                                                                                                                        if ($this->config->item('redis_status') == false) {
+                                                                                                                                            echo "";
+                                                                                                                                        }
+                                                                                                                                        ?> /></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-1">Host</div>
+                    <div class="col-2"><input class="form-control" type="text" name="redis_host" value="<?php echo @$this->config->item('redis_host'); ?>" required /></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-1">Port</div>
+                    <div class="col-2"><input class="form-control" type="number" name="redis_port" value="<?php echo @$this->config->item('redis_port'); ?>" required /></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-1">Auth</div>
+                    <div class="col-2"><input class="form-control" type="text" name="redis_auth" value="<?php echo @$this->config->item('redis_auth'); ?>" /></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-1">Scheme</div>
+                    <div class="col-2"><input class="form-control" type="text" name="redis_scheme" value="<?php echo @$this->config->item('redis_scheme'); ?>" required /></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-1" id="redistest"><button type="button" class="btn btn-primary btn-sm" onclick="redistest()">Test</button></div>
+                    <div class="col-2" style="text-align: center;"><button type="submit" class="btn btn-primary btn-sm">Save</button></div>
+                </div>
 
             </form>
 
@@ -81,7 +81,7 @@
 <?php $this->load->view('layout/down') ?>
 
 <script>
-function redistest() {
-    $("#redistest").load("settings/redisTest");
-}
+    function redistest() {
+        $("#redistest").load("settings/redisTest");
+    }
 </script>

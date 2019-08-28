@@ -55,7 +55,7 @@ class Livemap extends CI_Controller
 
         $userget = json_decode($client->get("user:" . $devicemac), true);
 
-        $gwinfo = $this->Gateways_model->getDetail($userget["gateway"]);
+        $gwinfo = $this->Gateways_model->get_by_mac($userget["gateway"]);
 
         $userget["location"] = (string) ($gwinfo[0]["lat"] + ($userget["rssi"] / 10000000)) . ", " . (string) ($gwinfo[0]["lng"] + ($userget["rssi"] / 10000000));
         $userget["personName"] = $devicemac;

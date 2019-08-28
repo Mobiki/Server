@@ -10,6 +10,8 @@ class Config extends CI_Controller
 
     public function index(Type $var = null)
     {
+        $this->session->sess_destroy();
+        
         $data = array(
             'pageId' => 0,
             'pageName' => "Config",

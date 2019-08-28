@@ -39,7 +39,7 @@
 
 
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="addUser" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-modal-lg" tabindex="-1" role="dialog" id="addUser" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
@@ -56,7 +56,7 @@
   </div>
 </div>
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="editUser" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-modal-lg" tabindex="-1" role="dialog" id="editUser" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 

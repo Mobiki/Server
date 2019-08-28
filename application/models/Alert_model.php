@@ -1,13 +1,19 @@
 <?php
 
+require_once(APPPATH . '../vendor/autoload.php');
+Predis\Autoloader::register();
+
 class Alert_model extends CI_Model
 {
+    protected $table = 'alert_logs';
+    protected $alert_rules = 'alert_rules';
+
     function __construct()
     {
         parent::__construct();
     }
 
-    public function redis(Type $var = null)
+    public function redis()
     {
         $client = new Predis\Client([
             'scheme' => $this->config->item('redis_scheme'),
@@ -17,40 +23,58 @@ class Alert_model extends CI_Model
         ]);
         return $client;
     }
-    
+
     public function addAlertLog($data)
     {
-        $this->db->insert("alert_logs",$data);
+        $this->db->insert("alert_logs", $data);
     }
-    
-    public function getAllAlerts(Type $var = null)
+
+    public function get_all_alert_rules()
     {
-        return $this->db->get("alert_rules")->result_array(); 
+        return $this->db->get($this->alert_rules)
+            ->result_array();
     }
 
-
-    public function getSuspendAlerts(Type $var = null)
+    public function insert_alert_rule($data)
     {
-        $this->db->where("status",2);
-        return $this->db->get("alert_logs")->result_array(); 
+        return $this->db->insert($this->alert_rules, $data);
     }
 
-    public function getCloseAlerts(Type $var = null)
+    public function update_alert_rule($id,$data)
     {
-        $this->db->where("status",3);
-        return $this->db->get("alert_logs")->result_array(); 
+        $this->db->where('id', $id);
+        return $this->db->update($this->alert_rules, $data);
+    }
+    public function delete_alert_rule($id)
+    {
+        $this->db->where('id', $id);
+        return $this->db->delete($this->alert_rules);
     }
 
-    public function alertClose($alertid,$devicemac)
+    public function getSuspendAlerts()
+    {
+        $this->db->where("status", 2);
+        return $this->db->get("alert_logs")
+        ->result_array();
+    }
+
+    public function getCloseAlerts()
+    {
+        $this->db->where("status", 3);
+        return $this->db->get("alert_logs")
+        ->result_array();
+    }
+
+    public function alertClose($alertid, $devicemac)
     {
         $client = $this->redis();
-        
-        $this->db->where("id",$alertid);
+
+        $this->db->where("id", $alertid);
         $data = array(
-            'close_date'=> date('Y-m-d H:i:s'),
-            'status'=>3,
+            'close_date' => date('Y-m-d H:i:s'),
+            'status' => 3,
         );
-        $this->db->update("alert_logs",$data);
+        $this->db->update("alert_logs", $data);
 
 
         $client->del('alertset:' . $devicemac);

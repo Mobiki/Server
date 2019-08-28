@@ -54,6 +54,14 @@ CREATE TABLE devices_type (
   description varchar(250) COLLATE utf8_general_ci NOT NULL
 );
 
+INSERT INTO devices_type(name, description) VALUES ('Card','Card devices');
+
+INSERT INTO devices_type(name, description) VALUES ('Sensors','Sensors devices');
+
+INSERT INTO devices_type(name, description) VALUES ('Light','Light devices');
+
+INSERT INTO devices_type(name, description) VALUES ('Assets','Assets devices');
+
 CREATE TABLE gateways (
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   name varchar(250) COLLATE utf8_general_ci NOT NULL,

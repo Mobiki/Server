@@ -80,7 +80,7 @@
 </div>
 
 
-<div class="modal fade bd-example-modal-lg" id="addDeviceTypeModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceTypeModalLabel" aria-hidden="true">
+<div class="modal fade bd-modal-lg" id="addDeviceTypeModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -116,7 +116,7 @@
 </div>
 
 
-<div class="modal fade bd-example-modal-lg" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
+<div class="modal fade bd-modal-lg" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -179,7 +179,7 @@
 </div>
 
 
-<div class="modal fade bd-example-modal-lg" id="editDeviceModal" tabindex="-1" role="dialog" aria-labelledby="editGatewayModalLabel" aria-hidden="true">
+<div class="modal fade bd-modal-lg" id="editDeviceModal" tabindex="-1" role="dialog" aria-labelledby="editGatewayModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
