@@ -49,8 +49,8 @@
                 <div style="font-size: small;">
                     <ul id="dvList">
                         <?php
-                        foreach ($device_list as $value) {
-                            echo "<li><a href='history/userlog?mac=" . $value["mac"] . "'>" . $value["name"] . "</a></li>";
+                        foreach (@$device_list as $value) {
+                            echo "<li><a href='history/userlog?mac=" . @$value["mac"] . "'>" . @$value["name"] . "</a></li>";
                         }
 
                         ?>

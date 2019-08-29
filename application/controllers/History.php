@@ -24,7 +24,7 @@ class History extends CI_Controller
     }
 
 
-    public function userlog(Type $var = null)
+    public function userlog()
     {
         $getmac=$this->input->get("mac");
 
@@ -48,7 +48,7 @@ class History extends CI_Controller
         //echo json_encode($userlog);
     }
 
-    public function userlogjson(Type $var = null)
+    public function userlogjson()
     {
         $getmac=$this->input->get("mac");
 

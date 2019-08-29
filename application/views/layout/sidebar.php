@@ -36,6 +36,7 @@
     </li>
     <li class="nav-item">
         <a class="nav-link" style="padding-bottom: 0px;" href="<?php echo base_url('personnel') ?>">
+        <i class="fa fa-male" aria-hidden="true"></i>
             <span>Personnel</span>
         </a>
     </li>
@@ -64,6 +65,7 @@
 
     <li class="nav-item">
         <a class="nav-link" style="padding-bottom: 0px;" href="<?php echo base_url('settings') ?>">
+        <i class="fa fa-cogs" aria-hidden="true"></i>
             <span>Settings</span>
         </a>
     </li>

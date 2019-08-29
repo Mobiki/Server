@@ -8,7 +8,7 @@ class Assets extends CI_Controller
         parent::__construct();
     }
 
-    public function index(Type $var = null)
+    public function index()
     {
         $data = array(
             'pageId'=>8,

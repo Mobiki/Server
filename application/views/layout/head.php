@@ -1,15 +1,9 @@
 <?php
 //$flashdata = $this->session->flashdata();
 $user_data = $this->session->userdata('userdata');
-$users_buildings = $this->session->flashdata('users_buildings');
 //print_r($user_data);
-//print_r($users_buildings); 
-
 //print_r($flashdata);
-if ($user_data['auth'] == 'auth1') {
-    //echo "user";
-} else {
-    //echo "admin";
+if ($user_data['auth'] == 'auth1') { } else {
     redirect(site_url() . 'login');
 }
 ?>
@@ -24,9 +18,9 @@ if ($user_data['auth'] == 'auth1') {
     <?php $this->load->view("layout/styles"); ?>
 
     <style>
-        .navbar{
+        .navbar {
             border-radius: 0px;
             margin-bottom: 0px;
         }
-        </style>
-</head> 
+    </style>
+</head>

@@ -2,8 +2,11 @@
 date_default_timezone_set('Europe/Istanbul');
 defined('BASEPATH') or exit('No direct script access allowed');
 
-require_once(APPPATH . '../vendor/autoload.php');
-Predis\Autoloader::register();
+
+    require_once(APPPATH . '../vendor/autoload.php');
+    Predis\Autoloader::register();
+
+
 
 class Dashboard extends CI_Controller
 {
@@ -17,8 +20,9 @@ class Dashboard extends CI_Controller
         $this->load->model("Users_model");
     }
 
-    public function redis(Type $var = null)
+    public function redis()
     {
+        if ($this->config->item('redis_status')==TRUE) {
         $client = new Predis\Client([
             'scheme' => $this->config->item('redis_scheme'),
             'host'   => $this->config->item('redis_host'),
@@ -26,9 +30,10 @@ class Dashboard extends CI_Controller
             'password' => $this->config->item('redis_auth')
         ]);
         return $client;
+        }
     }
 
-    public function index(Type $var = null)
+    public function index()
     {
         $client = $this->redis();
 
@@ -45,7 +50,6 @@ class Dashboard extends CI_Controller
         $data = array(
             'pageId'    =>  1,
             'pageName' => 'Dashboard',
-            'gateway_list' => $gateway_list,
             'device_list' => $device_list,
             'gwjson' => $gwjson,
 
@@ -54,7 +58,7 @@ class Dashboard extends CI_Controller
         $this->load->view('dashboard', $data);
     }
 
-    public function gateways(Type $var = null)
+    public function gateways()
     {
         $client = $this->redis();
 
@@ -75,9 +79,13 @@ class Dashboard extends CI_Controller
     }
 
 
-    public function rtls(Type $var = null)
+    public function rtls()
     {
         $client = $this->redis();
+
+        //öenmli
+        //$devices = $client->keys("devices:*"); diye çekilecek
+
 
         $userkeys = $client->keys("user:*");
         $sensorkeys = $client->keys("sensor:*");
@@ -100,7 +108,6 @@ class Dashboard extends CI_Controller
                     'userdata' => $userget
 
                 );
-                //header('Content-Type: application/json');
                 //echo json_encode($users);
                 if (isset($userget["epoch"])) {
                     $epoch = $userget["epoch"] + 10800;
@@ -315,7 +322,7 @@ die();*/
     }
     //#################################################################################################
 
-    public function alert(Type $var = null)
+    public function alert()
     {
         $client = $this->redis();
 
@@ -406,7 +413,7 @@ die();*/
         }
     }
 
-    public function suspendalert(Type $var = null)
+    public function suspendalert()
     {
         $client = $this->redis();
 
@@ -431,10 +438,10 @@ die();*/
         $client->set($lightmac, $lightsuspend);
     }
 
-    public function getsuspendalert(Type $var = null)
+    public function getsuspendalert()
     {
         $suspendAlert = $this->Alert_model->getSuspendAlerts();
-        $usersList = $this->Users_model->users_get_all();
+        $usersList = $this->Users_model->get_all();
 
         foreach ($suspendAlert as $key => $avalue) {
             foreach ($usersList as $key => $uvalue) {
@@ -460,7 +467,7 @@ die();*/
         }
     }
 
-    public function closeAlert(Type $var = null)
+    public function closeAlert()
     {
         $alertid = $this->input->get("alertid");
         $devicemac = $this->input->get("mac");
@@ -468,7 +475,7 @@ die();*/
     }
 
 
-    public function getclosedalert(Type $var = null)
+    public function getclosedalert()
     {
         $getCloseAlerts = $this->Alert_model->getCloseAlerts();
 

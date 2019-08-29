@@ -1,24 +1,22 @@
 <?php $this->load->view('layout/up') ?>
 
 
-<?php //print_r($devices_type); 
-?>
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-    <?php foreach ($devices_type as $key => $dtvalue) { ?>
+    <?php foreach (@$devices_type as $key => $dtvalue) { ?>
     <li class="nav-item">
-        <a class="nav-link <?php if ($dtvalue["id"] == "1") { ?>active<?php } ?>" id="pills-<?php echo $dtvalue["id"]; ?>-tab" data-toggle="pill" href="#pills-<?php echo $dtvalue["id"]; ?>" role="tab" aria-selected="<?php if ($dtvalue["id"] == "1") { ?>true<?php } else { ?>false<?php } ?>"><?php echo $dtvalue["name"]; ?></a>
+        <a class="nav-link <?php if (@$dtvalue["id"] == "1") { ?>active<?php } ?>" id="pills-<?php echo @$dtvalue["id"]; ?>-tab" data-toggle="pill" href="#pills-<?php echo $dtvalue["id"]; ?>" role="tab" aria-selected="<?php if ($dtvalue["id"] == "1") { ?>true<?php } else { ?>false<?php } ?>"><?php echo $dtvalue["name"]; ?></a>
     </li>
     <?php } ?>
 
     <li class="nav-item">
-        <a class="nav-link <?php if (count($devices_type) == 0) {
+        <a class="nav-link <?php if (count(@$devices_type) == 0) {
                                 echo "active";
                             } ?>" id="pills-add-tab" data-toggle="modal" data-target='#addDeviceTypeModal' href="#pills-add" role="tab" aria-selected="false"><strong> + </strong></a>
     </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
-    <?php foreach ($devices_type as $key => $dtvalue) { ?>
-    <div class="tab-pane fade <?php if ($dtvalue["id"] == "1") { ?>show active<?php } ?>" id="pills-<?php echo $dtvalue["id"]; ?>" role="tabpanel" aria-labelledby="pills-<?php echo $dtvalue["id"]; ?>-tab">
+    <?php foreach (@$devices_type as $key => $dtvalue) { ?>
+    <div class="tab-pane fade <?php if (@$dtvalue["id"] == "1") { ?>show active<?php } ?>" id="pills-<?php echo @$dtvalue["id"]; ?>" role="tabpanel" aria-labelledby="pills-<?php echo $dtvalue["id"]; ?>-tab">
 
         <div class="row">
             <div class="col-md-12">
@@ -33,7 +31,7 @@
                             <link rel="stylesheet" href="">
 
 
-                            <table id="dataTable" class="table table-striped table-bordered table-hover">
+                            <table id="dataTable" class="table table-striped table-bordered table-hover" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <td>#</td>
@@ -46,7 +44,7 @@
                                         <td>Edit</td>
                                     </tr>
                                 </thead>
-                                <tbody id="gateways">
+                                <tbody id="devices">
                                     <?php
                                         foreach (@$devices as $key => $value) {
                                             if (@$value["type_id"] == @$dtvalue["id"]) {
@@ -179,7 +177,7 @@
 </div>
 
 
-<div class="modal fade bd-modal-lg" id="editDeviceModal" tabindex="-1" role="dialog" aria-labelledby="editGatewayModalLabel" aria-hidden="true">
+<div class="modal fade bd-modal-lg" id="editDeviceModal" tabindex="-1" role="dialog" aria-labelledby="editDeviceModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -294,4 +292,8 @@
     function sendtoredis() {
         $("#dv").load("devices/toredis");
     }
+
+    $(document).ready(function() {
+    $('#dataTable').DataTable();
+  });
 </script>

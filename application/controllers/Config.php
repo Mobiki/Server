@@ -3,15 +3,17 @@
 
 class Config extends CI_Controller
 {
+    protected $md5key = '4671dfb2178c8f4b231f94a2e1ae675e'; //önemli
+
     function __construct()
     {
         parent::__construct();
     }
 
-    public function index(Type $var = null)
+    public function index()
     {
         $this->session->sess_destroy();
-        
+
         $data = array(
             'pageId' => 0,
             'pageName' => "Config",
@@ -19,7 +21,7 @@ class Config extends CI_Controller
         $this->load->view('config', $data);
     }
 
-    public function db(Type $var = null)
+    public function db()
     {
         $dbname =  $this->input->post("dbname", true);
 
@@ -56,10 +58,8 @@ $db["default"] = array(
 	"save_queries" => TRUE
 );';
 
-            fwrite($ourFileHandle, $written); //write new db connect file
-            fclose($ourFileHandle); //file close
-
-
+            fwrite($ourFileHandle, $written);
+            fclose($ourFileHandle);
             redirect("config/creatTables?dbname=" . $dbname);
         }
     }
@@ -67,37 +67,30 @@ $db["default"] = array(
     public function creatTables()
     {
         $dbname =  $this->input->get("dbname");
+        if ($dbname != "") {
+            try {
+                $sql = file_get_contents(APPPATH . '../openmobiki.sql');
+                $sqls = explode(';', $sql);
 
-            if ($dbname != "") {
+                foreach ($sqls as $key => $value) {
 
-                try {
-                    $sql = file_get_contents(APPPATH . '../openmobiki.sql');
-                    $sqls = explode(';', $sql);
-
-                    foreach ($sqls as $key => $value) {
-
-                        $statment = $sqls[$key] . ";";
-                        $this->db->query($statment);
-                    }
-                } catch (Exception $e) {
-                    var_dump($e->getMessage());
+                    $statment = $sqls[$key] . ";";
+                    $this->db->query($statment);
                 }
-            } else {
-
-                echo ("db yok");
+            } catch (Exception $e) {
+                var_dump($e->getMessage());
             }
-        
+        } else {
+            echo ("db yok");
+        }
     }
 
     public function license()
     {
         $filename = "license.php";
         $ourFileHandle = fopen(APPPATH . '/config/' . $filename, 'w');
-
         $written =  '<?php $config["key"]="";  ';
-
         fwrite($ourFileHandle, $written);
-
         fclose($ourFileHandle);
     }
 
@@ -112,7 +105,7 @@ $db["default"] = array(
             'role_id' => 1,
             'name' => $name,
             'email' => $email,
-            'password' => md5($password . md5('4671dfb2178c8f4b231f94a2e1ae675e')),
+            'password' => md5($password . md5($this->md5key)),
             'phone' => '',
             'description' => '',
             'token' => md5((string) time() . md5('b88d0391a211c286feee919055e7e75d')),
@@ -126,7 +119,6 @@ $db["default"] = array(
         );
 
         $this->db->insert('company', $cdata);
-
         redirect("login");
     }
 }

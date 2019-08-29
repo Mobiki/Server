@@ -24,52 +24,56 @@ class Zones extends CI_Controller
         return $client;
     }
 
-    public function index(Type $var = null)
+    public function index()
     {
-        $zones= $this->Zones_model->getAllZones();
-        $data=array(
-            'pageId'=>'3',
-            'pageName'=>'Zones',
-            'zones'=>$zones,
+        $zones = $this->Zones_model->get_all();
+        $data = array(
+            'pageId' => '3',
+            'pageName' => 'Zones',
+            'zones' => $zones,
         );
-        $this->load->view("zones",$data);
+        $this->load->view("zones", $data);
     }
 
     public function add()
     {
-        $name = $this->input->post("name", true);
-        $parent_id = $this->input->post("parent_id", true);
-        $description = $this->input->post("description", true);
+        $data = array(
+            'name' => $this->input->post("name", true),
+            'parent_id' => $this->input->post("parent_id", true),
+            'description' => $this->input->post("description", true),
+        );
 
-        $zones = $this->Zones_model->addzone($name,$parent_id,$description);
-        if ($zones) {
+        $result = $this->Zones_model->insert($data);
+
+        if ($result) {
             $this->toredis();
             redirect('zones');
         } else {
-            # code...
+            echo "Error - Zones - Add";
         }
-        
-        
     }
 
     public function delete()
     {
-        # code...
+        $id = $this->input->post("id", true);
+        $this->Zones_model->delete($id);
     }
 
     public function edit()
     {
-        # code...
+        $id = $this->input->post("id", true);
+        $data = array(
+            'name' => $this->input->post("name", true),
+            'parent_id' => $this->input->post("parent_id", true),
+            'description' => $this->input->post("description", true),
+        );
+        $this->Zones_model->update($id, $data);
     }
-
-
 
     public function toredis()
     {
         $client = $this->redis();
-        $zones=$this->Zones_model->getAllZones();
-        //print_r( json_decode(json_encode($gateways),true));
-        $client->set("zones",json_encode($zones));
+        $zones = $this->Zones_model->get_all();
+        $client->set("zones", json_encode($zones));
     }
-
 }

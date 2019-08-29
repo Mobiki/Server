@@ -27,7 +27,7 @@ class Gateways extends CI_Controller
     public function index()
     {
         $gateways = $this->Gateways_model->get_all();
-        $zones = $this->Zones_model->getAllZones();
+        $zones = $this->Zones_model->get_all();
 
         $data = array(
             'pageId' => '',
@@ -43,7 +43,7 @@ class Gateways extends CI_Controller
     {
         $mac = $this->input->get("mac");
         $gateway = $this->Gateways_model->get_by_mac($mac);
-        $zones = $this->Zones_model->getAllZones();
+        $zones = $this->Zones_model->get_all();
         $data = array(
             'pageId' => '4.1',
             'section' => 'detail',
@@ -94,7 +94,7 @@ class Gateways extends CI_Controller
     }
 
 
-    public function toredis(Type $var = null)
+    public function toredis()
     {
         $client = $this->redis();
         $gateways = $this->Gateways_model->get_all();

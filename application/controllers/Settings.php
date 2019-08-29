@@ -1,5 +1,7 @@
 <?php
 
+require_once(APPPATH . '../vendor/autoload.php');
+Predis\Autoloader::register();
 
 
 class Settings extends CI_Controller

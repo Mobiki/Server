@@ -76,6 +76,9 @@ CREATE TABLE gateways (
 CREATE TABLE personnel (
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   name varchar(250) COLLATE utf8_general_ci NOT NULL,
+  image varchar(250) COLLATE utf8_general_ci NOT NULL,
+  email varchar(250) COLLATE utf8_general_ci NOT NULL,
+  phone varchar(250) COLLATE utf8_general_ci NOT NULL,
   type_id int(11) NOT NULL,
   department_id int(11) NOT NULL,
   device_id int(11) NOT NULL,

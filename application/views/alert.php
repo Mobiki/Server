@@ -147,12 +147,10 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="name">Alert Name</label>
-                                <input type="gatewaysn" class="form-control" id="ename" name="name" placeholder="">
+                                <input type="text" class="form-control" id="ename" name="name" placeholder="">
                             </div>
                         </div>
-
                         <div class="col-6">
-
                         </div>
                     </div>
 
@@ -191,7 +189,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="device_id">Sensor Value </label>
-                                <input type="gatewaysn" class="form-control" id="esensor_value" name="sensor_value" placeholder="C/L/T/H > /123/1/*/*">
+                                <input type="text" class="form-control" id="esensor_value" name="sensor_value" placeholder="C/L/T/H > /123/1/*/*">
                             </div>
                         </div>
                         <div class="col-6">
@@ -319,11 +317,4 @@
         $('#delet_alert').hide();
     });
 
-    /*$('#device_id').on('change', function() {
-        if (this.value == 0) {
-            $("#select_device_type").show();
-        } else {
-            $("#select_device_type").hide();
-        }
-    });*/
 </script>

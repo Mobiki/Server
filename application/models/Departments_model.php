@@ -1,9 +1,8 @@
 <?php
 
-class Personnel_model extends CI_Model
+class Departments_model extends CI_Model
 {
-    protected $table = 'personnel';
-    protected $personnel_type = 'personnel_type';
+    protected $table = 'departments';
 
     function __construct()
     {
@@ -13,13 +12,6 @@ class Personnel_model extends CI_Model
     public function get_all()
     {
         return $this->db->get($this->table)
-            ->result_array();
-        //->result();
-    }
-
-    public function get_all_personnel_type()
-    {
-        return $this->db->get($this->personnel_type)
             ->result_array();
         //->result();
     }
