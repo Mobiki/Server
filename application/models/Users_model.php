@@ -3,7 +3,7 @@
 class Users_model extends CI_Model
 {
     protected $table = 'users';
-    protected $md5key = '4671dfb2178c8f4b231f94a2e1ae675e'; //önemli
+    protected $md5key = '79bc58b970a431cc86aa06e98328227e'; //önemli
 
     function __construct()
     {

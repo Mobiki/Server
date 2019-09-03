@@ -15,29 +15,61 @@ class Personnel extends CI_Controller
         $this->load->model("Departments_model");
         $this->load->model("Devices_model");
 
+        $this->load->helper(array('form', 'url'));
     }
 
-    public function do_upload()
+    public function add_personnel()
     {
-        $config = array(
-            'upload_path' => "assets/images/personnel/",
-            'allowed_types' => "gif|jpg|png|jpeg",
-            'overwrite' => TRUE,
-            'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
-            'max_height' => "768",
-            'max_width' => "1024"
-        );
+        $config['upload_path']          = 'assets/images/personnel/';
+        $config['allowed_types']        = 'gif|jpg|png|jpeg';
+        //$config['max_size']             = 100;
+        //$config['max_width']            = 1024;
+        //$config['max_height']           = 768;
+
         $this->load->library('upload', $config);
 
-        echo $this->input->post('userfile', true);
-        if ($this->upload->do_upload($this->input->post('userfile', true)))
-                {
-                    echo "true";
-                }
-                else
-                {
-                    echo "false";
-                }
+        if (!$this->upload->do_upload('userfile')) {
+            $data = array(
+                'name' => $this->input->post('name', true),
+                'image' => 'default-user-image.png',
+                'email' => $this->input->post('email', true),
+                'type_id' => $this->input->post('type_id', true),
+                'department_id' => $this->input->post('department_id', true),
+                'device_id' => $this->input->post('device_id', true),
+                'status' => "1",
+                //'error' => $this->upload->display_errors()
+            );
+
+            //$this->load->view('us', $data);
+
+            $result = $this->Personnel_model->insert($data);
+            if ($result) {
+                redirect('personnel');
+            } else {
+                echo "Error - Personnel - Update";
+            }
+
+        } else {
+            $data = array(
+                'name' => $this->input->post('name', true),
+                'image' => $this->upload->data()['file_name'],
+                'email' => $this->input->post('email', true),
+                'type_id' => $this->input->post('type_id', true),
+                'department_id' => $this->input->post('department_id', true),
+                'device_id' => $this->input->post('device_id', true),
+                'status' => "1",
+                //'upload_data' => $this->upload->data()["file_name"]
+            );
+
+            //$this->load->view('us', $data);
+
+            $result = $this->Personnel_model->insert($data);
+            if ($result) {
+                redirect('personnel');
+            } else {
+                echo "Error - Personnel - Update";
+            }
+        }
     }
 
     public function index()
@@ -64,25 +96,6 @@ class Personnel extends CI_Controller
     }
 
 
-    public function add_personnel()
-    {
-        $data = array(
-            'name' => $this->input->post('name', true),
-            'image' => $this->input->post('image', true),
-            'email' => $this->input->post('email', true),
-            'type_id' => $this->input->post('type_id', true),
-            'department_id' => $this->input->post('department_id', true),
-            'device_id' => $this->input->post('device_id', true),
-            'status' => "1",
-        );
-
-        $result = $this->Personnel_model->insert($data);
-        if ($result) {
-            redirect('personnel');
-        } else {
-            echo "Error - Personnel - Update";
-        }
-    }
 
     public function add_personnel_type()
     {

@@ -6,3 +6,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['assets'] = 'assets/index';
+$route['assets/delete'] = 'assets/delete';

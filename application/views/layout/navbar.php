@@ -14,6 +14,8 @@ $user_data = $this->session->userdata('userdata');
       <li class="nav-item active">
         <a class="nav-link" href="#"><?php echo @$pageName; ?> <span class="sr-only">(current)</span></a>
       </li>
+
+<!--
       <li class="nav-item">
         <a class="nav-link" href="#">Link </a>
       </li>
@@ -28,8 +30,12 @@ $user_data = $this->session->userdata('userdata');
           <a class="dropdown-item" href="#">Something else here</a>
         </div>
       </li>
+-->
     </ul>
   </div>
+
+  <a class="nav-link" style="padding-bottom: 0px;" href="<?php echo base_url('livemap') ?>"><i class="fas fa-fw fa-map"></i></a>
+  
   <ul class="navbar-nav ml-auto ml-md-0">
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
