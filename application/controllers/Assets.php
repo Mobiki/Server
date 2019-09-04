@@ -123,7 +123,6 @@ class Assets extends CI_Controller
 
             $data = array(
                 'name' => $this->input->post('name', true),
-                'image' => 'default-asset-image.jpg',
                 'stock_code' => $this->input->post('stock_code', true),
                 'serial_number' => $this->input->post('serial_number', true),
                 'manufacturer' => $this->input->post('manufacturer', true),
@@ -134,7 +133,6 @@ class Assets extends CI_Controller
                 'type_id' => $this->input->post('type_id', true),
                 'model' => '0',
                 'status' => 1,
-                'date_added' => $now,
                 'date_modified' => $now,
                 //'error' => $this->upload->display_errors()
             );
@@ -152,15 +150,10 @@ class Assets extends CI_Controller
                 'stock_code' => $this->input->post('stock_code', true),
                 'model' => '0',
                 'status' => 1,
-                'date_added' => $now,
                 'date_modified' => $now,
                 //'upload_data' => $this->upload->data()["file_name"]
             );
         }
-
-
-
-
 
         $result = $this->Assets_model->update($id, $data);
         if ($result) {
@@ -168,5 +161,51 @@ class Assets extends CI_Controller
         } else {
             echo "Error - Assets - Add";
         }
+    }
+
+    public function assete_types_index()
+    {
+        $asset_type = $this->Assets_model->get_all_asset_type();
+
+        $data = array(
+            'asset_type' => $asset_type,
+        );
+        $this->load->view('asset_types', $data);
+    }
+
+    public function list_asset_type()
+    {
+        $id = $this->input->get('id', true);
+        $asset_type = $this->Assets_model->get_all_asset_type();
+
+        echo '<option value="0">None</option>';
+        foreach ($asset_type as $key => $dtvalue) {
+            echo '<option value="' . $dtvalue['id'] . '" ';
+            if($id==$dtvalue['id']){echo " selected ";}
+            echo '>' . $dtvalue['name'] . '</option>';
+        }
+    }
+    public function add_asset_type()
+    {
+        $data = array(
+            'name' => $this->input->post('name', true),
+        );
+        $result = $this->Assets_model->insert_asset_type($data);
+    }
+
+    public function delete_asset_type()
+    {
+        $id = $this->input->post('id', true);
+        $result = $this->Assets_model->delete_asset_type($id);
+    }
+
+    public function edit_asset_type()
+    {
+        $id = $this->input->post('id', true);
+        $name = $this->input->post('name', true);
+        $data = array(
+            'name' => $name,
+        );
+        $result = $this->Assets_model->update_asset_type($id, $data);
     }
 }

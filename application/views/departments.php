@@ -1,5 +1,37 @@
 <?php $this->load->view('layout/up') ?>
 
+<?php
+/*foreach (@$departments as $key => $value) {
+
+    if ($value["parent_id"] == 0) {
+        echo $value["name"] . " || <br>";
+        h($departments, $value["name"], $value["id"], $value["parent_id"]);
+        echo " <br>";
+    }
+}
+
+function h($departments, $name, $id, $pid)
+{
+    $a = 0;
+    foreach ($departments as $key => $value) {
+        $a = $a + 1;
+        $z = "";
+        if ($value["parent_id"] == $id) {
+
+
+            for ($i = 0; $i < $a; $i++) {
+                $z = $z . "-";
+            }
+            echo $z . $value["name"] . " __ <br>";
+            h($departments, $value["name"], $value["id"], $value["parent_id"]);
+        }
+    }
+}*/
+?>
+
+
+
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -13,6 +45,7 @@
                     <thead>
                         <tr>
                             <td>Name</td>
+                            <td>Parent</td>
                             <td>Expiry Date</td>
                             <td style="width: 75px;">Edit</td>
                         </tr>
@@ -21,13 +54,24 @@
                         <?php
                         foreach (@$departments as $key => $value) {
 
-                            if ($value["expiry_date"]=="0000-00-00") {
+                            if ($value["expiry_date"] == "0000-00-00") {
                                 $expiry_date = "";
                             } else {
                                 $expiry_date = $value["expiry_date"];
                             }
-                            
+
+                            if ($value["parent_id"] != 0) {
+                                foreach (@$departments as $key => $svalue) {
+                                    if ($value["parent_id"] == $svalue["id"]) {
+                                        $parent_name = $svalue["name"];
+                                    }
+                                }
+                            } else {
+                                $parent_name = "";
+                            }
+
                             echo "<td>" . @$value["name"] . "</td>";
+                            echo "<td>" . @$parent_name . "</td>";
                             echo "<td>" . @$expiry_date . "</td>";
 
                             echo "<td>" . "<button type='button' 
@@ -35,6 +79,7 @@
                                 data-target='#addDepartmentModal' 
                                 data-id='" . @$value["id"] . "' 
                                 data-name='" . @$value["name"] . "' 
+                                data-parent_id='" . @$value["parent_id"] . "' 
                                 data-expiry_date='" . @$expiry_date . "' 
                             class='btn btn-success btn-sm'>Edit</button>" . "</td>";
                             echo "</tr>";
@@ -68,7 +113,19 @@
                                 <input type="text" class="form-control" id="ename" name="name" placeholder="" value="" required />
                             </div>
                         </div>
-
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="parent_id">Parent department</label>
+                                <select class="form-control" id="eparent_id" name="parent_id">
+                                    <option value="0">None</option>
+                                    <?php foreach (@$departments as $key => $dvalue) { ?>
+                                        <option value="<?php echo $dvalue["id"]; ?>"><?php echo $dvalue["name"]; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="expiry_date">Expiry Date</label>
@@ -119,6 +176,7 @@
 
             $('#eid').val($(this).data('id'));
             $('#ename').val($(this).data('name'));
+            $('#eparent_id').val($(this).data('parent_id'));
             $('#eexpiry_date').val($(this).data('expiry_date'));
 
             $('#did').val($(this).data('id'));
@@ -135,6 +193,7 @@
         $('#form_edit').attr('action', 'departments/add');
         $('#eid').val("");
         $('#ename').val("");
+        $('#eparent_id').val(0);
         $('#eexpiry_date').val("");
         $('#eid').val("");
         $('#cid').val("");

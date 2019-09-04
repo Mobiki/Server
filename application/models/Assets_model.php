@@ -69,4 +69,21 @@ class Assets_model extends CI_Model
         $this->db->where('id', $id);
         return $this->db->delete($this->table);
     }
+
+    //asset_type
+    
+    public function insert_asset_type($data)
+    {
+        return $this->db->insert($this->asset_type, $data);
+    }
+    public function delete_asset_type($id)
+    {
+        $this->db->where('id', $id);
+        return $this->db->delete($this->asset_type);
+    }
+    public function update_asset_type($id,$data)
+    {
+        $this->db->where('id', $id);
+        return $this->db->update($this->asset_type, $data);
+    }
 }

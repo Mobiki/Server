@@ -37,13 +37,14 @@ class Departments extends CI_Controller
     public function add()
     {
         if ($this->input->post('expiry_date', true)=="") {
-            $expiry_date = "0000-00-00 00:00:00";
+            $expiry_date = "0000-00-00";
         } else {
             $expiry_date = $this->input->post('expiry_date', true);
         }
         
         $data = array(
             'name' => $this->input->post('name', true),
+            'parent_id' => $this->input->post('parent_id', true),
             'expiry_date' => $expiry_date,
         );
         print_r($data);
@@ -60,6 +61,7 @@ class Departments extends CI_Controller
         $id = $this->input->post('id', true);
         $data = array(
             'name' => $this->input->post('name', true),
+            'parent_id' => $this->input->post('parent_id', true),
             'expiry_date' => $this->input->post('expiry_date', true),
         );
         $result = $this->Departments_model->update($id,$data);
