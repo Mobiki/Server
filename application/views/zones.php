@@ -7,48 +7,93 @@
                 <h6 class="m-0 font-weight-bold text-primary"><button type="button" data-toggle='modal' data-target='#addZoneModal' class="btn btn-primary btn-sm">Add Zone</button></h6>
             </div>
             <div class="card-body">
-                <div class="table-responsive" id="datatable">
-                    <link rel="stylesheet" href="">
-                    <table id="dataTable" class="table table-striped table-bordered table-hover">
-                        <tbody id="gateways">
-                            <?php
-                            //print_r($zones);
-                            $zz = $zones;
-                            $zzz = $zones;
-                            $zzzz = $zones;
-                            foreach ($zones as $key => $zvalue) {
-                                if ($zvalue["parent_id"] == 0) {
-                                    echo $zvalue["name"];
-                                    echo  "<br>";
-
-                                    foreach ($zz as $key => $zzvalue) {
-                                        if ($zzvalue["parent_id"] == $zvalue["id"]) {
-                                            echo "└--- " . $zzvalue["name"];
-                                            echo  "<br>";
-
-                                            foreach ($zzz as $key => $zzzvalue) {
-                                                if ($zzzvalue["parent_id"] == $zzvalue["id"]) {
-                                                    echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└--- " . $zzzvalue["name"];
-                                                    echo "<br>";
 
 
-                                                    foreach ($zzzz as $key => $zzzzvalue) {
-                                                        if ($zzzzvalue["parent_id"] == $zzzvalue["id"]) {
-                                                            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└--- " . $zzzzvalue["name"];
-                                                            echo "<br>";
-                                                        }
-                                                    }
-                                                }
+
+                <?php
+
+                foreach (@$zones as $key => $value) {
+                    if ($value["parent_id"] == 0) {
+                        echo '<div class="row">';
+                        echo '<div class="col-2">';
+                        echo $value["name"];
+                        echo '</div>';
+                        echo '<div class="col-1">';
+                        echo '<button type="button" id="btn_zone_delete" data-id="" class="btn btn-outline-secondary btn-sm"><i class="fa fa-window-close" aria-hidden="true"></i></button>';
+                        echo '</div>';
+                        echo '<div class="col-1">';
+                        echo '<button type="button" id="btn_zone_delete" data-id="" class="btn btn-outline-danger btn-sm"><i class="fa fa-window-close" aria-hidden="true"></i></button>';
+                        echo '</div>';
+                        echo '</div>';
+                        hierarchical(1,$zones, $value["id"]);
+                        echo " <hr>";
+                    }
+                }
+
+                function hierarchical($a,$zones, $id)
+                {
+                    foreach ($zones as $key => $value) {
+                        if ($value["parent_id"] == $id) {
+                            echo '<div class="row">';
+                            for ($i = 0; $i < $a; $i++) {
+                                echo '&nbsp;-';
+                                echo $a;
+                            }
+                            echo '<div class="col-2">';
+                            echo $value["name"];
+                            echo '</div>';
+                            echo '</div>';
+                            $a = $a + 1; 
+                            
+                            hierarchical($a,$zones, $value["id"]);
+                        }
+                        
+                    }
+                }
+                ?>
+
+
+                <hr>
+                <br>
+                <br>
+                <?php
+                //print_r($zones);
+                $zz = $zones;
+                $zzz = $zones;
+                $zzzz = $zones;
+                foreach ($zones as $key => $zvalue) {
+                    if ($zvalue["parent_id"] == 0) {
+                        echo $zvalue["name"];
+                        echo  "<br>";
+                        foreach ($zz as $key => $zzvalue) {
+
+                            if ($zzvalue["parent_id"] == $zvalue["id"]) {
+                                echo "└--- " . $zzvalue["name"];
+                                echo  "<br>";
+                                foreach ($zzz as $key => $zzzvalue) {
+                                    if ($zzzvalue["parent_id"] == $zzvalue["id"]) {
+                                        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└--- " . $zzzvalue["name"];
+                                        echo "<br>";
+
+
+                                        foreach ($zzzz as $key => $zzzzvalue) {
+                                            if ($zzzzvalue["parent_id"] == $zzzvalue["id"]) {
+                                                echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└--- " . $zzzzvalue["name"];
+                                                echo "<br>";
                                             }
                                         }
                                     }
                                 }
                             }
+                        }
+                    }
+                }
 
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+                ?>
+
+
+
+
             </div>
         </div>
     </div>
@@ -82,7 +127,7 @@
                                 <select class="form-control" id="parent_id" name="parent_id">
                                     <option value="0">Null</option>
                                     <?php foreach ($zones as $key => $zvalue) {  ?>
-                                    <option value="<?php echo $zvalue["id"]; ?>"><?php echo $zvalue["name"]; ?></option>
+                                        <option value="<?php echo $zvalue["id"]; ?>"><?php echo $zvalue["name"]; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>

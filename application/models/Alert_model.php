@@ -5,8 +5,8 @@ Predis\Autoloader::register();
 
 class Alert_model extends CI_Model
 {
-    protected $table = 'alert_logs';
     protected $alert_rules = 'alert_rules';
+    protected $alert_logs = 'alert_logs';
 
     function __construct()
     {
@@ -24,11 +24,6 @@ class Alert_model extends CI_Model
         return $client;
     }
 
-    public function addAlertLog($data)
-    {
-        $this->db->insert("alert_logs", $data);
-    }
-
     public function get_all_alert_rules()
     {
         return $this->db->get($this->alert_rules)
@@ -40,7 +35,7 @@ class Alert_model extends CI_Model
         return $this->db->insert($this->alert_rules, $data);
     }
 
-    public function update_alert_rule($id,$data)
+    public function update_alert_rule($id, $data)
     {
         $this->db->where('id', $id);
         return $this->db->update($this->alert_rules, $data);
@@ -51,32 +46,43 @@ class Alert_model extends CI_Model
         return $this->db->delete($this->alert_rules);
     }
 
-    public function getSuspendAlerts()
+
+
+
+
+    //alert_logs
+    public function get_all_alert_logs()
+    {
+        return $this->db->get($this->alert_logs)
+            ->result_array();
+    }
+    public function get_all_suspended_alerts()
     {
         $this->db->where("status", 2);
-        return $this->db->get("alert_logs")
-        ->result_array();
+        return $this->db->get($this->alert_logs)
+            ->result_array();
     }
-
-    public function getCloseAlerts()
+    public function get_all_closed_alerts()
     {
         $this->db->where("status", 3);
-        return $this->db->get("alert_logs")
-        ->result_array();
+        return $this->db->get($this->alert_logs)
+            ->result_array();
     }
 
-    public function alertClose($alertid, $devicemac)
+
+
+    public function insert_alert_log($data)
     {
-        $client = $this->redis();
-
-        $this->db->where("id", $alertid);
-        $data = array(
-            'close_date' => date('Y-m-d H:i:s'),
-            'status' => 3,
-        );
-        $this->db->update("alert_logs", $data);
+        return $this->db->insert($this->alert_logs, $data);
+    }
 
 
-        $client->del('alertset:' . $devicemac);
+
+
+
+    public function alert_close($id, $data)
+    {
+        $this->db->where("id", $id);
+        return $this->db->update($this->alert_logs, $data);
     }
 }

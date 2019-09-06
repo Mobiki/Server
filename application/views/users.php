@@ -12,6 +12,7 @@
             <tr>
               <td>#</td>
               <td>Name</td>
+              <td>Role</td>
               <td>Email</td>
               <td>Phone</td>
               <td>Description</td>
@@ -19,15 +20,29 @@
             </tr>
           </thead>
           <tbody id="userstbody">
-            <?php foreach (@$users_data as $key => $value) { ?>
-            <tr>
-              <td><?php echo @$value["id"]; ?></td>
-              <td><?php echo @$value["name"]; ?></td>
-              <td><?php echo @$value["email"]; ?></td>
-              <td><?php echo @$value["phone"]; ?></td>
-              <td><?php echo @$value["description"]; ?></td>
-              <td><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addUser" data-id="<?php echo @$value["id"]; ?>" data-name="<?php echo @$value["name"]; ?>" data-email="<?php echo @$value["email"]; ?>" data-phone="<?php echo @$value["phone"]; ?>" data-description="<?php echo @$value["description"]; ?>">Edit</button></td>
-            </tr>
+            <?php foreach (@$users_data as $key => $value) {
+              if (@$value["role_id"] == 0) {
+                $role_name = "";
+              } else {
+                foreach (@$users_role as $key => $dvalue) {
+                  if ($dvalue["id"] == $value["role_id"]) {
+                    $role_name = $dvalue["name"];
+                    break;
+                  } else {
+                    $role_name = "";
+                  }
+                }
+              }
+              ?>
+              <tr>
+                <td><?php echo @$value["id"]; ?></td>
+                <td><?php echo @$value["name"]; ?></td>
+                <td><?php echo @$role_name; ?></td>
+                <td><?php echo @$value["email"]; ?></td>
+                <td><?php echo @$value["phone"]; ?></td>
+                <td><?php echo @$value["description"]; ?></td>
+                <td><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addUser" data-id="<?php echo @$value["id"]; ?>" data-name="<?php echo @$value["name"]; ?>" data-role_id="<?php echo @$value["role_id"]; ?>" data-email="<?php echo @$value["email"]; ?>" data-phone="<?php echo @$value["phone"]; ?>" data-description="<?php echo @$value["description"]; ?>">Edit</button></td>
+              </tr>
             <?php } ?>
           </tbody>
         </table>
@@ -35,8 +50,6 @@
     </div>
   </div>
 </div>
-
-
 
 <div class="modal fade bd-modal-lg" tabindex="-1" role="dialog" id="addUser" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -59,10 +72,16 @@
             </div>
 
             <div class="col-6">
-
+              <div class="form-group">
+                <label for="role_id">User Role</label>
+                <select class="form-control" id="erole_id" name="role_id">
+                  <?php foreach (@$users_role as $key => $dtvalue) { ?>
+                    <option value="<?php echo $dtvalue["id"]; ?>"><?php echo $dtvalue["name"]; ?></option>
+                  <?php } ?>
+                </select>
+              </div>
             </div>
           </div>
-
           <div class="row">
             <div class="col-6">
               <div class="form-group">
@@ -77,8 +96,6 @@
               </div>
             </div>
           </div>
-
-
           <div class="row">
             <div class="col-6">
               <div class="form-group">
@@ -93,18 +110,15 @@
               </div>
             </div>
           </div>
-
           <hr>
           <div class="row">
             <div class="col-12">
               <div class="form-group" style="text-align: right;">
                 <button type="submit" class="btn btn-primary" id="btn_user_add">Add User</button>
-
               </div>
             </div>
           </div>
         </form>
-
         <hr>
         <form action="users/cpass" method="post">
           <input type="hidden" id="cid" name="id" value="" />
@@ -116,14 +130,11 @@
 
               <input type="password" class="form-control" id="password" name="password" placeholder="" value="" />
             </div>
-
             <div class="col-6">
               <div class="form-group" style="text-align: right;">
                 <button type="submit" class="btn btn-primary" id="btn_ch_password">Change Password</button>
-
               </div>
             </div>
-
           </div>
         </form>
         <div class="row" id="delet_user" style="display:none;">
@@ -131,12 +142,10 @@
             <form action="users/delete" method="post">
               <input type="hidden" id="did" name="id" value="" />
               <button type="submit" class="btn btn-danger">Delete User</button>
-
             </form>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -160,11 +169,12 @@
       $('#btn_user_add').html("Edit User");
       $('#eid').val($(this).data('id'));
       $('#ename').val($(this).data('name'));
+      $('#erole_id').val($(this).data('role_id'));
       $('#eemail').val($(this).data('email'));
       $('#ephone').val($(this).data('phone'));
       $('#edescription').val($(this).data('description'));
 
-      $("#epassword").prop('required',false);
+      $("#epassword").prop('required', false);
 
       $('#did').val($(this).data('id'));
       $('#cid').val($(this).data('id'));
@@ -183,11 +193,12 @@
 
     $('#eid').val("");
     $('#ename').val("");
+    $('#erole_id').val(0);
     $('#email').val("");
     $('#phone').val("");
     $('#description').val("");
 
-    $("#epassword").prop('required',true);
+    $("#epassword").prop('required', true);
 
     $('#password_section').show();
     $('#change_password_section').hide();

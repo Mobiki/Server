@@ -38,7 +38,7 @@
                                         $department_name = $dvalue["name"];
                                         break;
                                     } else {
-                                        $type_name = "";
+                                        $department_name = "";
                                     }
                                 }
                             }
@@ -50,7 +50,7 @@
                                         $personnel_name = $dvalue["name"];
                                         break;
                                     } else {
-                                        $type_name = "";
+                                        $personnel_name = "";
                                     }
                                 }
                             }
@@ -74,7 +74,7 @@
                                         $device_name = $dvalue["name"];
                                         break;
                                     } else {
-                                        $type_name = "";
+                                        $device_name = "";
                                     }
                                 }
                             }
@@ -343,6 +343,7 @@
     $(document).ready(function() {
         $("#assete_types_list").load("<?php echo base_url('assets/assete_types_index'); ?>");
     });
+    
     $('#btn_add_type').on("click", function() {
         if ($('#asset_type_name').val() == "") {
             alert("Write a asset type");

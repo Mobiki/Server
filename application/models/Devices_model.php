@@ -24,12 +24,6 @@ class Devices_model extends CI_Model
         //->result();
     }
 
-    public function get_all_device_type()
-    {
-        return $this->db->get($this->devices_type)
-            ->result_array();
-    }
-
     public function get_by_id($id)
     {
         return $this->db->get_where($this->table, array('id' => $id))
@@ -65,21 +59,10 @@ class Devices_model extends CI_Model
         return $this->db->insert($this->table, $data);
     }
 
-    public function insert_device_type($data)
-    {
-        return $this->db->insert($this->devices_type, $data);
-    }
-
     public function update($id, $data)
     {
         $this->db->where('id', $id);
         return $this->db->update($this->table, $data);
-    }
-
-    public function update_device_type($id, $data)
-    {
-        $this->db->where('id', $id);
-        return $this->db->update($this->devices_type, $data);
     }
 
     public function delete($id)
@@ -88,9 +71,27 @@ class Devices_model extends CI_Model
         return $this->db->delete($this->table);
     }
 
+    //device_type
+    public function get_all_device_type()
+    {
+        return $this->db->get($this->devices_type)
+            ->result_array();
+    }
+
+    public function insert_device_type($data)
+    {
+        return $this->db->insert($this->devices_type, $data);
+    }
+
     public function delete_device_type($id)
     {
         $this->db->where('id', $id);
         return $this->db->delete($this->devices_type);
+    }
+
+    public function update_device_type($id, $data)
+    {
+        $this->db->where('id', $id);
+        return $this->db->update($this->devices_type, $data);
     }
 }

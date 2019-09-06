@@ -177,15 +177,12 @@
     </div>
 </div>
 
-
-
-
 <div id="dashboard"></div>
 
-<?php $this->load->view("layout/scripts"); ?>
+
+<?php $this->load->view('layout/down'); ?>
 
 <script>
-    
     setInterval(function() {
         try {
             $("#log").load("dashboard/rtls");
@@ -194,13 +191,10 @@
             $("#alert").load("dashboard/alert");
             $("#gateways").load("dashboard/gateways");
 
-            $("#alertsuspend").load("dashboard/getsuspendalert");
-            $("#alertclosed").load("dashboard/getclosedalert");
+            $("#alertsuspend").load("dashboard/get_all_suspended_alerts");
+            $("#alertclosed").load("dashboard/get_all_closed_alerts");
         } catch (err) {
             console.log("error");
         }
     }, 10000);
-
 </script>
-
-<?php $this->load->view('layout/down'); ?>

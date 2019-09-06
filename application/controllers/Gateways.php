@@ -66,30 +66,32 @@ class Gateways extends CI_Controller
         );
         
         $this->Gateways_model->insert($data);
+        $this->toredis();
         redirect('gateways');
     }
 
     public function delete()
     {
-        $id = $this->input->post("hid", true);
+        $id = $this->input->post("id", true);
         $this->Gateways_model->delete($id);
+        $this->toredis();
         redirect('gateways');
     }
 
 
     public function edit()
     {
-        $id = $this->input->post("eid", true);
+        $id = $this->input->post("id", true);
         $data = array(
-            'name' => $this->input->post("ename", true),
-            'zone_id' => $this->input->post("ezone_id", true),
-            'lat' => $this->input->post("elat", true),
-            'lng' => $this->input->post("elng", true),
-            'mac' => $this->input->post("emac", true),
-            'description' => $this->input->post("edescription", true),
+            'name' => $this->input->post("name", true),
+            'zone_id' => $this->input->post("zone_id", true),
+            'lat' => $this->input->post("lat", true),
+            'lng' => $this->input->post("lng", true),
+            'mac' => $this->input->post("mac", true),
+            'description' => $this->input->post("description", true),
         );
-
         $this->Gateways_model->update($id, $data);
+        $this->toredis();
         redirect('gateways');
     }
 

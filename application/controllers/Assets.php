@@ -1,6 +1,9 @@
 
 <?php
 
+require_once(APPPATH . '../vendor/autoload.php');
+Predis\Autoloader::register();
+
 class Assets extends CI_Controller
 {
     function __construct()
@@ -13,6 +16,17 @@ class Assets extends CI_Controller
         $this->load->model("Devices_model");
 
         $this->load->helper(array('form', 'url'));
+    }
+
+    public function redis()
+    {
+        $client = new Predis\Client([
+            'scheme' => $this->config->item('redis_scheme'),
+            'host'   => $this->config->item('redis_host'),
+            'port'   => $this->config->item('redis_port'),
+            'password' => $this->config->item('redis_auth')
+        ]);
+        return $client;
     }
 
     public function index()
@@ -89,6 +103,7 @@ class Assets extends CI_Controller
 
         $result = $this->Assets_model->insert($data);
         if ($result) {
+            $this->toredis();
             redirect('assets/index');
         } else {
             echo "Error - Assets - Add";
@@ -101,6 +116,7 @@ class Assets extends CI_Controller
         $id = $this->input->post('id', true);
         $result = $this->Assets_model->delete($id);
         if ($result) {
+            $this->toredis();
             redirect('assets/index');
         } else {
             echo "Error - assets - Delete";
@@ -157,6 +173,7 @@ class Assets extends CI_Controller
 
         $result = $this->Assets_model->update($id, $data);
         if ($result) {
+            $this->toredis();
             redirect('assets/index');
         } else {
             echo "Error - Assets - Add";
@@ -191,12 +208,14 @@ class Assets extends CI_Controller
             'name' => $this->input->post('name', true),
         );
         $result = $this->Assets_model->insert_asset_type($data);
+        $this->toredis();
     }
 
     public function delete_asset_type()
     {
         $id = $this->input->post('id', true);
         $result = $this->Assets_model->delete_asset_type($id);
+        $this->toredis();
     }
 
     public function edit_asset_type()
@@ -207,5 +226,16 @@ class Assets extends CI_Controller
             'name' => $name,
         );
         $result = $this->Assets_model->update_asset_type($id, $data);
+        $this->toredis();
+    }
+
+    public function toredis()
+    {
+        $client = $this->redis();
+        $asset_type = $this->Assets_model->get_all_asset_type();
+        $client->set("asset_type", json_encode($asset_type));
+
+        $assets = $this->Assets_model->get_all();
+        $client->set("assets", json_encode($assets));
     }
 }
