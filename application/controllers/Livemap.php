@@ -43,6 +43,7 @@ class Livemap extends CI_Controller
     public function getLastDeviceInfo()
     {
         $devicemac = $this->input->get("mac");
+        
 
         $client = new Predis\Client([
             'scheme' => $this->config->item('redis_scheme'),
@@ -54,14 +55,59 @@ class Livemap extends CI_Controller
         $date = [];
 
         $userget = json_decode($client->get("user:" . $devicemac), true);
+        $devices = json_decode($client->get("devices"), true);
+        $personnel = json_decode($client->get("personnel"), true);
+        $gateways = json_decode($client->get("gateways"), true);
+
+        foreach ($devices as $key => $device) {
+            if ($device["mac"]==$devicemac) {
+                $device_id=$device["id"];
+            }
+        }
+
+        foreach ($personnel as $key => $personn) {
+            if ($personn["device_id"]==$device_id) {
+                $person_name=$personn["name"];
+            }
+        }
 
         $gwinfo = $this->Gateways_model->get_by_mac($userget["gateway"]);
 
+        
+        $timedef = (time() + 10800) - $userget["epoch"];
+
+        //if($timedef<30){
         $userget["location"] = (string) ($gwinfo[0]["lat"] + ($userget["rssi"] / 10000000)) . ", " . (string) ($gwinfo[0]["lng"] + ($userget["rssi"] / 10000000));
-        $userget["personName"] = $devicemac;
-        $userget["gw_name"] = $devicemac;
+        $userget["personName"] = $person_name;
+        $userget["gw_name"] = $gwinfo[0]["name"];
 
         header('Content-Type: application/json');
         echo json_encode($userget);
+        //}
+    }
+
+    public function widget()
+    {
+        $dosya = '151_0_p.xml';
+
+        //$tum = __DIR__.'/../../../resources/mapAssets/xml/'.$dosya;
+        $tum = __DIR__ . '/../../151/' . $dosya;
+
+        $xml = file_get_contents($tum);
+
+        //$yeniArr = $this->gatewaysInfo();
+        $yeniArr = "";
+
+        //return view('m2boyut', ['xml' => $xml,'gwList' => $yeniArr]);
+        $devices = $this->Devices_model->get_all();
+
+        $data = array(
+            'id' => '',
+            'pageName' => "Map",
+            'xml' => $xml,
+            'gwList' => $yeniArr,
+            'devices' => $devices,
+        );
+        $this->load->view('live_map_widget', $data);
     }
 }

@@ -1,14 +1,14 @@
 CREATE TABLE alert_logs (
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  device_mac varchar(250) COLLATE utf8_general_ci NOT NULL,
-  user_id int(11) NOT NULL,
+  alert_key varchar(250) COLLATE utf8_general_ci NOT NULL,
+  alert_rules_id int(11) NOT NULL,
+  device_id int(11) NOT NULL,
+  gateway_mac int(11) NOT NULL,
+  suspended_user_id int(11) NOT NULL,
   closed_user_id int(11) NOT NULL,
-  epoch int(11) NOT NULL,
-  suspend_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  suspend_date datetime NOT NULL,
   close_date datetime NOT NULL,
-  msg varchar(250) COLLATE utf8_general_ci NOT NULL,
-  gateway varchar(250) COLLATE utf8_general_ci NOT NULL,
-  status int(11) NOT NULL
+  status tinyint(1) NOT NULL COMMENT 'open 1/suspend 2/closed 3'
 );
 
 CREATE TABLE alert_rules (
@@ -22,9 +22,24 @@ CREATE TABLE alert_rules (
 
 CREATE TABLE assets (
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name varchar(250) COLLATE utf8_general_ci NOT NULL,
+  name varchar(250) COLLATE utf8_general_ci NOT NULL COMMENT 'Asset name',
+  image varchar(250) COLLATE utf8_general_ci NOT NULL,
+  type_id int(11) NOT NULL COMMENT 'Asset type id',
   description varchar(250) COLLATE utf8_general_ci NOT NULL,
-  serial_number varchar(250) COLLATE utf8_general_ci NOT NULL
+  department_id int(11) NOT NULL,
+  personnel_id int(11) NOT NULL,
+  device_id int(11) NOT NULL,
+  serial_number varchar(250) COLLATE utf8_general_ci NOT NULL,
+  manufacturer varchar(250) COLLATE utf8_general_ci NOT NULL,
+  stock_code varchar(250) COLLATE utf8_general_ci NOT NULL,
+  status tinyint(1) NOT NULL,
+  date_added datetime NOT NULL,
+  date_modified datetime NOT NULL
+);
+
+CREATE TABLE asset_type (
+  id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name varchar(250) COLLATE utf8_general_ci NOT NULL
 );
 
 CREATE TABLE company (
@@ -35,7 +50,9 @@ CREATE TABLE company (
 
 CREATE TABLE departments (
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name varchar(250) COLLATE utf8_general_ci NOT NULL
+  name varchar(250) COLLATE utf8_general_ci NOT NULL,
+  parent_id int(11) NOT NULL,
+  expiry_date date NOT NULL
 );
 
 CREATE TABLE devices (
@@ -103,8 +120,14 @@ CREATE TABLE users (
 
 CREATE TABLE users_role (
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name varchar(250) COLLATE utf8_general_ci NOT NULL
+  name varchar(250) COLLATE utf8_general_ci NOT NULL COMMENT 'Admin/Departmant Manager/Viewer'
 );
+
+INSERT INTO users_role (id,name) VALUES (1,'Admin');
+
+INSERT INTO users_role (id,name) VALUES (2,'Departmant Manager');
+
+INSERT INTO users_role (id,name) VALUES (3,'Viewer');
 
 CREATE TABLE zones (
   id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,

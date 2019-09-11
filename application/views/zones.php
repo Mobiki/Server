@@ -1,4 +1,5 @@
 <?php $this->load->view('layout/up') ?>
+<link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap-treeview.min.css"); ?>">
 
 <div class="row">
     <div class="col-md-12">
@@ -7,12 +8,15 @@
                 <h6 class="m-0 font-weight-bold text-primary"><button type="button" data-toggle='modal' data-target='#addZoneModal' class="btn btn-primary btn-sm">Add Zone</button></h6>
             </div>
             <div class="card-body">
+                <div class="row">
+
+                    <div class="col-12" id="treeview_json">
+                    </div>
 
 
+                    <?php
 
-                <?php
-
-                foreach (@$zones as $key => $value) {
+                    /*foreach (@$zones as $key => $value) {
                     if ($value["parent_id"] == 0) {
                         echo '<div class="row">';
                         echo '<div class="col-2">';
@@ -49,57 +53,17 @@
                         }
                         
                     }
-                }
-                ?>
-
-
-                <hr>
-                <br>
-                <br>
-                <?php
-                //print_r($zones);
-                $zz = $zones;
-                $zzz = $zones;
-                $zzzz = $zones;
-                foreach ($zones as $key => $zvalue) {
-                    if ($zvalue["parent_id"] == 0) {
-                        echo $zvalue["name"];
-                        echo  "<br>";
-                        foreach ($zz as $key => $zzvalue) {
-
-                            if ($zzvalue["parent_id"] == $zvalue["id"]) {
-                                echo "└--- " . $zzvalue["name"];
-                                echo  "<br>";
-                                foreach ($zzz as $key => $zzzvalue) {
-                                    if ($zzzvalue["parent_id"] == $zzvalue["id"]) {
-                                        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└--- " . $zzzvalue["name"];
-                                        echo "<br>";
-
-
-                                        foreach ($zzzz as $key => $zzzzvalue) {
-                                            if ($zzzzvalue["parent_id"] == $zzzvalue["id"]) {
-                                                echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└--- " . $zzzzvalue["name"];
-                                                echo "<br>";
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                ?>
+                }*/
+                    ?>
 
 
 
-
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="dv"></div>
+</div>
 
 
 <div class="modal fade bd-modal-lg" id="addZoneModal" tabindex="-1" role="dialog" aria-labelledby="addZoneModalLabel" aria-hidden="true">
@@ -112,7 +76,7 @@
                 </button>
             </div>
             <div class="modal-body" id="addmodalbody">
-                <form action="zones/add" method="post">
+                <form action="<?php echo base_url("zones/add"); ?>" method="post">
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
@@ -152,4 +116,64 @@
 </div>
 
 
+
+
+
+
 <?php $this->load->view('layout/down') ?>
+<script type="text/javascript" charset="utf8" src="<?php echo base_url("assets/js/bootstrap-treeview.min.js"); ?>"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var treeData;
+        $.ajax({
+            type: "GET",
+            url: "<?php echo base_url("zones/treeview"); ?>",
+            dataType: "json",
+            success: function(response) {
+                initTree(response)
+            }
+        });
+
+        function initTree(treeData) {
+            $('#treeview_json').treeview({
+                data: treeData
+            });
+        }
+    });
+
+
+    function clicked(d) {
+        console.log(d);
+        
+    }
+
+    function btnadd(id,e) {
+        console.log(e);
+    $('#addZoneModal').modal('show');
+}
+
+
+function btndelete(id) {
+    //alert("delete"+id);
+    $.post("<?php echo base_url("zones/delete");?>", { 'id': id })
+  .done(function( data ) {
+    var treeData;
+        $.ajax({
+            type: "GET",
+            url: "<?php echo base_url("zones/treeview"); ?>",
+            dataType: "json",
+            success: function(response) {
+                initTree(response)
+            }
+        });
+
+        function initTree(treeData) {
+            $('#treeview_json').treeview({
+                data: treeData
+            });
+        }
+  });
+}
+</script>

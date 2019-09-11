@@ -76,4 +76,39 @@ class Zones extends CI_Controller
         $zones = $this->Zones_model->get_all();
         $client->set("zones", json_encode($zones));
     }
+    
+
+    public function treeview()
+    {
+        $data = [];
+        $parent_key = '0';
+        $row = $this->db->query('SELECT * from zones');
+
+        if($row->num_rows() > 0)
+        {
+            $data = $this->membersTree($parent_key);
+        }else{
+            $data=["id"=>"0","name"=>"No Members presnt in list","text"=>"No Members is presnt in list","nodes"=>[]];
+        }
+        echo json_encode(array_values($data));
+    }
+
+    public function membersTree($parent_key)
+    {
+        $row1 = [];
+        $row = $this->db->query('SELECT id, name from zones WHERE parent_id="'.$parent_key.'"')->result_array();
+        foreach($row as $key => $value)
+        {
+           $id = $value['id'];
+           $row1[$key]['id'] = $value['id'];
+           $row1[$key]['name'] = $value['name'];
+           $row1[$key]['text'] = $value['name'];
+           $row1[$key]['nodes'] = array_values($this->membersTree($value['id']));
+        }
+        return $row1;
+    }
+    public function zones_treeview()
+    {
+        $this->load->view("zones_treeview");
+    }
 }

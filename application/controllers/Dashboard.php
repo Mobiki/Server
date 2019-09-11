@@ -442,9 +442,9 @@ class Dashboard extends CI_Controller
         echo '<td><a href="' . $gateway_location . '">' . $gateway_name . '</a></td>';
         echo '<td>';
         echo '<div class="custom-control custom-switch">';?>
-        <input type="checkbox" class="custom-control-input" onClick="$('#stopalarm').load('alert/suspend_alert?alert_key=<?php echo $alert_key;?>&alert_rules_id=<?php echo $alert_id;?>&device_id=<?php echo $device_id;?>&gateway_id=<?php echo $gateway_id;?>');" id="cs" />
+        <input type="checkbox" class="custom-control-input" onClick="$('#stopalarm').load('alert/suspend_alert?alert_key=<?php echo $alert_key;?>&alert_rules_id=<?php echo $alert_id;?>&device_id=<?php echo $device_id;?>&gateway_id=<?php echo $gateway_id;?>');" id="cs<?php echo $epoch;?>" />
         <?php
-        echo '<label class="custom-control-label" for="cs"> Suspend Alarm</label>';
+        echo '<label class="custom-control-label" for="cs'.$epoch.'"> Suspend Alarm</label>';
         echo '</div>';
         echo '</td>';
         echo '</tr>';

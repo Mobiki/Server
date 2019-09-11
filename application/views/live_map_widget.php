@@ -1,13 +1,8 @@
-<?php $this->load->view('layout/up') ?>
-
-
-
-
-
-
-
-
-
+<style>
+    body{
+        margin: 0px;
+    }
+    </style>
 <link rel="stylesheet" href="<?php echo base_url("assets/css/app.css"); ?>">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="*" />
 
@@ -38,7 +33,6 @@
     </section>
 </article>
 
-<?php $this->load->view('layout/down') ?>
 
 <script type="text/javascript" src="<?php echo base_url("assets/js/socket.io.js"); ?>"> </script>
 <script type="text/javascript" language="javascript" src="<?php echo base_url("assets/js/jquery-3.3.1.js"); ?>"></script>
@@ -84,7 +78,7 @@
                 renderer: L.svg({
                     padding: 100 //değer haritanın düzgün bir şekilde renderlanabilmesi için çok önemli
                 })
-            }).setView([40.9194102, 29.315826], 40)
+            }).setView([40.9191102, 29.315526], 40)
             //}).setView([40.9882717,28.8259847], 18)
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
                 attribution: 'Mobiki',
@@ -509,8 +503,11 @@
                 $.get("<?php echo base_url('livemap/getLastDeviceInfo?mac='.$dvalue["mac"]);?>", function(data, status) {
                     // marker ekleyecek fonksiyon
                     //map.addMarker(data)
+                    var timedif = <?php echo time();?> - data.epoch;
+                    if(timedif<30){
                     map.addMarker(data)
-
+                    }
+                    //console.log(timedif+" "+data.personName);
 
 
                     //data isimli objeyi kullanabilirsin

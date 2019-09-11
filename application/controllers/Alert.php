@@ -166,13 +166,34 @@ class Alert extends CI_Controller
 
         $user_data = $this->session->userdata('userdata');
         //if ($user_data["id"] != 0 && $user_data["id"] != "") {
-            $data = array(
-                'closed_user_id' => $user_data["id"],
-                'close_date' => date('Y-m-d H:i:s'),
-                'status' => 3,
-            );
-            $this->Alert_model->alert_close($alert_log_id, $data);
-            $client->del($alert_key);
+        $data = array(
+            'closed_user_id' => $user_data["id"],
+            'close_date' => date('Y-m-d H:i:s'),
+            'status' => 3,
+        );
+        $this->Alert_model->alert_close($alert_log_id, $data);
+        $client->del($alert_key);
         //}
+    }
+
+    public function get_logs()
+    {
+        $device_id = $this->input->get("device_id");
+        $gatewey_id = $this->input->get("gatewey_id");
+        $user_id = $this->input->get("user_id");
+
+        $start = $this->input->get("sDate");
+        $finish = $this->input->get("fDate");
+
+
+
+        $result = $this->Alert_model->get_alert_logs_where($device_id,$gatewey_id,$user_id,$start,$finish);
+        
+        print_r($result);
+    }
+
+    public function widget()
+    {
+        $this->load->view("alert_widget");
     }
 }

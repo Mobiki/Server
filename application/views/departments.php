@@ -39,55 +39,9 @@ function h($departments, $name, $id, $pid)
                 <h6 class="m-0 font-weight-bold text-primary"><button type="button" id="btn_add_department" data-toggle='modal' data-target='#addDepartmentModal' class="btn btn-primary btn-sm">Add Department</button></h6>
             </div>
             <div class="card-body">
-                <link rel="stylesheet" href="">
-
-                <table id="dataTable" class="table table-striped table-bordered table-hover" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <td>Name</td>
-                            <td>Parent</td>
-                            <td>Expiry Date</td>
-                            <td style="width: 75px;">Edit</td>
-                        </tr>
-                    </thead>
-                    <tbody id="departments">
-                        <?php
-                        foreach (@$departments as $key => $value) {
-
-                            if ($value["expiry_date"] == "0000-00-00") {
-                                $expiry_date = "";
-                            } else {
-                                $expiry_date = $value["expiry_date"];
-                            }
-
-                            if ($value["parent_id"] != 0) {
-                                foreach (@$departments as $key => $svalue) {
-                                    if ($value["parent_id"] == $svalue["id"]) {
-                                        $parent_name = $svalue["name"];
-                                    }
-                                }
-                            } else {
-                                $parent_name = "";
-                            }
-
-                            echo "<td>" . @$value["name"] . "</td>";
-                            echo "<td>" . @$parent_name . "</td>";
-                            echo "<td>" . @$expiry_date . "</td>";
-
-                            echo "<td>" . "<button type='button' 
-                                data-toggle='modal' 
-                                data-target='#addDepartmentModal' 
-                                data-id='" . @$value["id"] . "' 
-                                data-name='" . @$value["name"] . "' 
-                                data-parent_id='" . @$value["parent_id"] . "' 
-                                data-expiry_date='" . @$expiry_date . "' 
-                            class='btn btn-success btn-sm'>Edit</button>" . "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-
+                <div class="row">
+            <iframe  src="<?php echo base_url("departments/departments_treeview");?>" style="border: none;" width="100%" height="700px"></iframe>
+                </div>
             </div>
         </div>
     </div>

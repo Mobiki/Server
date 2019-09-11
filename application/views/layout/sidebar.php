@@ -13,8 +13,6 @@
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="<?php echo base_url('devices'); ?>">Devices</a>
             <a class="dropdown-item" href="<?php echo base_url('gateways'); ?>">Gateways</a>
-            <h6 class="dropdown-header">Logs</h6>
-            <a class="dropdown-item" href="<?php echo base_url('device_logs'); ?>">Device Logs</a>
         </div>
     </li>
     <!--<li class="nav-item">
@@ -32,9 +30,6 @@
             <a class="dropdown-item" href="<?php echo base_url('personnel'); ?>">Personnel</a>
             <a class="dropdown-item" href="<?php echo base_url('assets/index'); ?>">Assets</a>
             <a class="dropdown-item" href="<?php echo base_url('departments'); ?>">Departments</a>
-            <h6 class="dropdown-header">Logs</h6>
-            <a class="dropdown-item" href="<?php echo base_url('personnel_logs'); ?>">Personnel Logs/History</a>
-            <a class="dropdown-item" href="<?php echo base_url('assets_logs'); ?>">Assets Logs</a>
         </div>
     </li>
 
@@ -52,12 +47,16 @@
 
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" style="padding-bottom: 0px;" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Panel</span>
+            <i class="fas fa-fw fa-bars"></i>
+            <span>Logs</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href="<?php echo base_url('users'); ?>">Users</a>
-            <a class="dropdown-item" href="<?php echo base_url('settings'); ?>">Settings</a>
+            <h6 class="dropdown-header">Companiey's Losg</h6>
+            <a class="dropdown-item" href="<?php echo base_url('personnel_logs'); ?>">Personnel Logs/History</a>
+            <a class="dropdown-item" href="<?php echo base_url('assets_logs'); ?>">Assets Logs</a>
+            <h6 class="dropdown-header">Device Logs</h6>
+            <a class="dropdown-item" href="<?php echo base_url('gateway_logs'); ?>">Gateway Logs</a>
+            <a class="dropdown-item" href="<?php echo base_url('device_logs'); ?>">Device Logs</a>
         </div>
     </li>
 </ul>

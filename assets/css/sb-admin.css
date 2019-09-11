@@ -6758,7 +6758,8 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #007bff !important;
+  background-color: #003f84 !important;
+  /*background-color: #007bff !important;*/
 }
 
 a.bg-primary:hover, a.bg-primary:focus,
@@ -10525,7 +10526,7 @@ body {
 }
 
 .sidebar .nav-item .nav-link {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.9);/*önemli*/
 }
 
 .sidebar .nav-item .nav-link:active, .sidebar .nav-item .nav-link:focus, .sidebar .nav-item .nav-link:hover {

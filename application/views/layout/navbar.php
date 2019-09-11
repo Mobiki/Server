@@ -42,7 +42,8 @@ $user_data = $this->session->userdata('userdata');
         <i class="fas fa-user-circle fa-fw" style="display: inline; "> <?php echo $user_data['name']; ?></i>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-        <a class="dropdown-item" href="users">User Settings</a>
+        <a class="dropdown-item" href="<?php echo base_url('users') ?>">Users</a>
+        <a class="dropdown-item" href="<?php echo base_url('settings') ?>">Panel Settings</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
       </div>

@@ -16,6 +16,17 @@ class Personnel extends CI_Controller
 
         $this->load->helper(array('form', 'url'));
     }
+    
+    public function redis()
+    {
+        $client = new Predis\Client([
+            'scheme' => $this->config->item('redis_scheme'),
+            'host'   => $this->config->item('redis_host'),
+            'port'   => $this->config->item('redis_port'),
+            'password' => $this->config->item('redis_auth')
+        ]);
+        return $client;
+    }
 
     public function index()
     {
@@ -77,6 +88,7 @@ class Personnel extends CI_Controller
 
         $result = $this->Personnel_model->insert($data);
         if ($result) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Personnel - Update";
@@ -117,6 +129,7 @@ class Personnel extends CI_Controller
 
         $result = $this->Personnel_model->update($id, $data);
         if ($result == true) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Personnel - Update";
@@ -168,6 +181,7 @@ class Personnel extends CI_Controller
 
         $result = $this->Personnel_model->insert_personnel_type($data);
         if ($result) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Personnel - Update";
@@ -179,6 +193,7 @@ class Personnel extends CI_Controller
         $id =  $this->input->post('id', true);
         $result = $this->Personnel_model->delete_personnel_type($id);
         if ($result == true) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Personnel type - Delete";
@@ -194,6 +209,7 @@ class Personnel extends CI_Controller
 
         $result = $this->Personnel_model->update_personnel_type($id, $data);
         if ($result == true) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Departments - Update";
@@ -209,6 +225,7 @@ class Personnel extends CI_Controller
 
         $result = $this->Departments_model->insert($data);
         if ($result) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Personnel - Update";
@@ -220,6 +237,7 @@ class Personnel extends CI_Controller
         $id =  $this->input->post('id', true);
         $result = $this->Departments_model->delete($id);
         if ($result == true) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Personnel type - Delete";
@@ -235,6 +253,7 @@ class Personnel extends CI_Controller
 
         $result = $this->Departments_model->update($id, $data);
         if ($result == true) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Departments - Update";
@@ -249,6 +268,7 @@ class Personnel extends CI_Controller
 
         $result = $this->Personnel_model->update($id, $device_id);
         if ($result == true) {
+            $this->toredis();
             redirect('personnel');
         } else {
             echo "Error - Personnel - assign_device";
@@ -263,5 +283,8 @@ class Personnel extends CI_Controller
 
         $departments = $this->Departments_model->get_all();
         $client->set("departments", json_encode($departments));
+
+        $personnel_type = $this->Personnel_model->get_all_personnel_type();
+        $client->set("personnel_type", json_encode($personnel_type));
     }
 }

@@ -137,6 +137,7 @@
 
     
 </div>
+<div id="areport"></div>
 
 
 <?php $this->load->view('layout/down'); ?>
@@ -155,9 +156,12 @@
         var finishDate = $('#finish').val().split('/');
         //var finishepoch = new Date(finishDate[2], finishDate[0] - 1, finishDate[1], 23, 59, 59).getTime() / 1000;
         var device_id = $('#device_id').val();
-        if (sensorsmac != null) {
+        var gatewey_id = $('#gatewey_id').val();
+        var user_id = $('#user_id').val();
+        
+        if (device_id != null) {
             $("#imgProgress1").show();
-            $("#report").load("alert/get_logs?device_id="+device_id+ "&sDate=" + startDate + "&fDate=" + finishDate, function() {
+            $("#areport").load("<?php echo base_url("alert")?>/get_logs?device_id="+device_id+ "&gatewey_id="+gatewey_id+"&user_id="+user_id+"&sDate=" + startDate + "&fDate=" + finishDate, function() {
                 $("#imgProgress1").hide();
             });
         } else {
