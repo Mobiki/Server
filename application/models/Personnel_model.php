@@ -20,8 +20,7 @@ class Personnel_model extends CI_Model
     public function get_by_id($id)
     {
         return $this->db->get_where($this->table, array('id' => $id))
-            ->result_array();
-        //->row();
+            ->row();
     }
 
     public function get_where($where)

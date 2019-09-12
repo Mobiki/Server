@@ -124,14 +124,16 @@
             //debugger;
             const {
                 location,
+                lat,
+                lng,
                 personName,
                 gw_name
             } = data
 
             // lokasyonu da parçaladım. keyfine bağlı nasıl kullanacağın.
-            const parsedLocation = location.split(', ')
-            const lat = parsedLocation[0]
-            const lng = parsedLocation[1]
+            //const parsedLocation = location.split('#')
+            //const lat = parsedLocation[0]
+            //const lng = parsedLocation[1]
 
             // şuan bulunan markerler içerisinde ada göre arama yapıyorum. ad şimdilik eşsiz değer olarak kullanılıyor. başka daha mantıklı bir eşsiz değer kullanılabilir.
             let isExist = this.markers.getLayers().find((layer) => layer.options.name == personName)

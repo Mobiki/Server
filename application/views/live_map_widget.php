@@ -1,8 +1,8 @@
 <style>
-    body{
+    body {
         margin: 0px;
     }
-    </style>
+</style>
 <link rel="stylesheet" href="<?php echo base_url("assets/css/app.css"); ?>">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="*" />
 
@@ -38,8 +38,8 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url("assets/js/jquery-3.3.1.js"); ?>"></script>
 
 <script type="text/javascript" language="javascript">
-    var datatableObj = [];
 
+    var datatableObj = [];
     var Marker = [];
 
     <?php //foreach ($gwList as $row){ 
@@ -118,14 +118,18 @@
             //debugger;
             const {
                 location,
+                lat,
+                lng,
                 personName,
                 gw_name
             } = data
 
             // lokasyonu da parçaladım. keyfine bağlı nasıl kullanacağın.
-            const parsedLocation = location.split(', ')
-            const lat = parsedLocation[0]
-            const lng = parsedLocation[1]
+            //const parsedLocation = location.split('#')
+            //const lat = parsedLocation[0]
+            //const lng = parsedLocation[1]
+            //const lat = lat
+            //const lng = lng
 
             // şuan bulunan markerler içerisinde ada göre arama yapıyorum. ad şimdilik eşsiz değer olarak kullanılıyor. başka daha mantıklı bir eşsiz değer kullanılabilir.
             let isExist = this.markers.getLayers().find((layer) => layer.options.name == personName)
@@ -174,7 +178,7 @@
     }
 
     var RealTimePage = {
-        
+
         //xml : `{!!$xml!!}`,
 
         xml: `<?php print_r($xml); ?>`,
@@ -469,18 +473,23 @@
             function isNumber(n) {
                 return !isNaN(parseFloat(n)) && isFinite(n);
             }
+
             function attr(x, y) {
                 return x.getAttribute(y);
             }
+
             function attrf(x, y) {
                 return parseFloat(x.getAttribute(y));
             }
+
             function getBy(x, y) {
                 return x.getElementsByTagName(y);
             }
+
             function lonLat(elem) {
                 return [attrf(elem, 'lon'), attrf(elem, 'lat')];
             }
+
             function setIf(x, y, o, name, f) {
                 if (attr(x, y)) o[name] = f ? parseFloat(attr(x, y)) : attr(x, y);
             }
@@ -496,16 +505,16 @@
 
         setInterval(function() {
 
-            //map.addMarker({'location':'40.9194102, 29.315826','personName':'test','gw_name':'GW NAME'});
+            //map.addMarker({'location':'40.9194102#29.315826','personName':'test','gw_name':'GW NAME'});
 
             <?php foreach ($devices as $key => $dvalue) { ?>
 
-                $.get("<?php echo base_url('livemap/getLastDeviceInfo?mac='.$dvalue["mac"]);?>", function(data, status) {
+                $.get("<?php echo base_url('livemap/getLastDeviceInfo?mac=' . $dvalue["mac"]); ?>", function(data, status) {
                     // marker ekleyecek fonksiyon
                     //map.addMarker(data)
-                    var timedif = <?php echo time();?> - data.epoch;
-                    if(timedif<30){
-                    map.addMarker(data)
+                    var timedif = <?php echo time(); ?> - data.epoch;
+                    if (timedif < 30) {
+                        map.addMarker(data)
                     }
                     //console.log(timedif+" "+data.personName);
 

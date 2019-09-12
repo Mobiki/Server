@@ -40,8 +40,8 @@
             <span>Alert</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="<?php echo base_url('alert/alerts'); ?>">Alerts</a>
             <a class="dropdown-item" href="<?php echo base_url('alert'); ?>">Alert Rules</a>
-            <a class="dropdown-item" href="<?php echo base_url('alert/logs'); ?>">Alert Logs</a>
         </div>
     </li>
 
@@ -57,6 +57,8 @@
             <h6 class="dropdown-header">Device Logs</h6>
             <a class="dropdown-item" href="<?php echo base_url('gateway_logs'); ?>">Gateway Logs</a>
             <a class="dropdown-item" href="<?php echo base_url('device_logs'); ?>">Device Logs</a>
+            <h6 class="dropdown-header">Alert Logs</h6>
+            <a class="dropdown-item" href="<?php echo base_url('alert/logs'); ?>">Alert Logs</a>
         </div>
     </li>
 </ul>

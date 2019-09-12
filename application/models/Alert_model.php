@@ -85,4 +85,27 @@ class Alert_model extends CI_Model
         $this->db->where("id", $id);
         return $this->db->update($this->alert_logs, $data);
     }
+
+    public function get_alert_logs_where($device_id, $gatewey_id, $user_id, $start, $finish)
+    {
+        
+        if ($device_id > 0) {
+            $where["device_id"] = $device_id;
+        }
+        if ($gatewey_id > 0) {
+            $where["gatewey_id"] = $gatewey_id;
+        }
+        
+        if ($user_id > 0) {
+            $where["suspended_user_id"] = $user_id;
+        }
+
+        $where["suspend_date >"] = $start;
+        $where["suspend_date <"] = $finish;
+
+
+        $this->db->where($where);
+        return $this->db->get($this->alert_logs)->result_array();
+        //->result();
+    }
 }

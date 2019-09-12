@@ -8,7 +8,7 @@ class Gateways_model extends CI_Model
     {
         parent::__construct();
     }
-    
+
     //get_all
     //get_by_id
     //get_where
@@ -26,15 +26,13 @@ class Gateways_model extends CI_Model
     public function get_by_id($id)
     {
         return $this->db->get_where($this->table, array('id' => $id))
-            ->result_array();
-        //->row();
+            ->row();
     }
 
     public function get_by_mac($mac)
     {
         return $this->db->get_where($this->table, array('mac' => $mac))
-            ->result_array();
-        //->row();
+            ->row();
     }
 
     public function get_where($where)

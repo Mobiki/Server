@@ -83,6 +83,14 @@ class Departments extends CI_Controller
         }
     }
 
+    public function get_by_id()
+    {
+        $id = $this->input->get('id', true);
+        $result = $this->Departments_model->get_by_id($id);
+
+        header('Content-Type: application/json');
+        echo json_encode($result);
+    }
 
     public function treeview()
     {

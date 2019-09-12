@@ -8,94 +8,97 @@
                     <button type="button" id="btn_add_asset" data-toggle='modal' data-target='#addAssetModal' class="btn btn-primary btn-sm">Add Asset</button></button></h6>
             </div>
             <div class="card-body">
-                <link rel="stylesheet" href="">
-                <table id="dataTable" class="table table-striped table-bordered table-hover" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <td style="width: 56px;">Status</td>
-                            <td>Name</td>
-                            <td>Image</td>
-                            <td>Stock Code</td>
-                            <td>Serial Number</td>
-                            <td>Type</td>
-                            <td>Manufacturer</td>
-                            <td>Department</td>
-                            <td>Personnel</td>
-                            <td>Device</td>
-                            <td>Date Added</td>
-                            <td>Date Modified</td>
-                            <td>Edit</td>
-                        </tr>
-                    </thead>
-                    <tbody id="assets">
-                        <?php
-                        foreach (@$assets as $key => $value) {
-                            if (@$value["department_id"] == 0) {
-                                $department_name = "";
-                            } else {
-                                foreach (@$departments as $key => $dvalue) {
-                                    if ($dvalue["id"] == $value["department_id"]) {
-                                        $department_name = $dvalue["name"];
-                                        break;
-                                    } else {
-                                        $department_name = "";
-                                    }
-                                }
-                            }
-                            if (@$value["personnel_id"] == 0) {
-                                $personnel_name = "";
-                            } else {
-                                foreach (@$personnel as $key => $dvalue) {
-                                    if ($dvalue["id"] == $value["personnel_id"]) {
-                                        $personnel_name = $dvalue["name"];
-                                        break;
-                                    } else {
-                                        $personnel_name = "";
-                                    }
-                                }
-                            }
-                            if (@$value["type_id"] == 0) {
-                                $type_name = "";
-                            } else {
-                                foreach (@$asset_type as $key => $dvalue) {
-                                    if ($dvalue["id"] == $value["type_id"]) {
-                                        $type_name = $dvalue["name"];
-                                        break;
-                                    } else {
-                                        $type_name = "";
-                                    }
-                                }
-                            }
-                            if (@$value["device_id"] == 0) {
-                                $device_name = "";
-                            } else {
-                                foreach (@$devices as $key => $dvalue) {
-                                    if ($dvalue["id"] == $value["device_id"]) {
-                                        $device_name = $dvalue["name"];
-                                        break;
-                                    } else {
-                                        $device_name = "";
-                                    }
-                                }
-                            }
-                            echo "<tr>";
-                            if (@$value["status"] == 1) {
-                                echo "<td>" . "<b style='color:green;'>&#11044;</b>" . "</td>";
-                            } else {
-                                echo "<td>" . "<b style='color:red;'>&#11044;</b>" . "</td>";
-                            }
-                            echo "<td>" . @$value["name"] . "</td>";
-                            echo "<td>" . "<img style='height: 35px;' src='" . base_url('assets/images/assets/' . @$value["image"])  . "'/></td>";
-                            echo "<td>" . @$value["stock_code"] . "</td>";
-                            echo "<td>" . @$value["serial_number"] . "</td>";
-                            echo "<td>" . $type_name . "</td>";
-                            echo "<td>" . @$value["manufacturer"] . "</td>";
-                            echo "<td>" . @$department_name . "</td>";
-                            echo "<td>" . @$personnel_name . "</td>";
-                            echo "<td>" . @$device_name . "</td>";
-                            echo "<td>" . @$value["date_added"] . "</td>";
-                            echo "<td>" . @$value["date_modified"] . "</td>";
-                            echo "<td>" . "<button type='button' 
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div style="font-size: small;">
+                            <div class="table-responsive">
+                                <table id="dataTable" class="table table-striped table-bordered table-hover" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <td style="width: 56px;">Status</td>
+                                            <td>Name</td>
+                                            <td>Image</td>
+                                            <td>Stock Code</td>
+                                            <td>Serial Number</td>
+                                            <td>Type</td>
+                                            <td>Manufacturer</td>
+                                            <td>Department</td>
+                                            <td>Personnel</td>
+                                            <td>Device</td>
+                                            <td>Date Added</td>
+                                            <td>Date Modified</td>
+                                            <td>Edit</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="assets">
+                                        <?php
+                                        foreach (@$assets as $key => $value) {
+                                            if (@$value["department_id"] == 0) {
+                                                $department_name = "";
+                                            } else {
+                                                foreach (@$departments as $key => $dvalue) {
+                                                    if ($dvalue["id"] == $value["department_id"]) {
+                                                        $department_name = $dvalue["name"];
+                                                        break;
+                                                    } else {
+                                                        $department_name = "";
+                                                    }
+                                                }
+                                            }
+                                            if (@$value["personnel_id"] == 0) {
+                                                $personnel_name = "";
+                                            } else {
+                                                foreach (@$personnel as $key => $dvalue) {
+                                                    if ($dvalue["id"] == $value["personnel_id"]) {
+                                                        $personnel_name = $dvalue["name"];
+                                                        break;
+                                                    } else {
+                                                        $personnel_name = "";
+                                                    }
+                                                }
+                                            }
+                                            if (@$value["type_id"] == 0) {
+                                                $type_name = "";
+                                            } else {
+                                                foreach (@$asset_type as $key => $dvalue) {
+                                                    if ($dvalue["id"] == $value["type_id"]) {
+                                                        $type_name = $dvalue["name"];
+                                                        break;
+                                                    } else {
+                                                        $type_name = "";
+                                                    }
+                                                }
+                                            }
+                                            if (@$value["device_id"] == 0) {
+                                                $device_name = "";
+                                            } else {
+                                                foreach (@$devices as $key => $dvalue) {
+                                                    if ($dvalue["id"] == $value["device_id"]) {
+                                                        $device_name = $dvalue["name"];
+                                                        break;
+                                                    } else {
+                                                        $device_name = "";
+                                                    }
+                                                }
+                                            }
+                                            echo "<tr>";
+                                            if (@$value["status"] == 1) {
+                                                echo "<td>" . "<b style='color:green;'>&#11044;</b>" . "</td>";
+                                            } else {
+                                                echo "<td>" . "<b style='color:red;'>&#11044;</b>" . "</td>";
+                                            }
+                                            echo "<td>" . @$value["name"] . "</td>";
+                                            echo "<td>" . "<img style='height: 35px;' src='" . base_url('assets/images/assets/' . @$value["image"])  . "'/></td>";
+                                            echo "<td>" . @$value["stock_code"] . "</td>";
+                                            echo "<td>" . @$value["serial_number"] . "</td>";
+                                            echo "<td>" . $type_name . "</td>";
+                                            echo "<td>" . @$value["manufacturer"] . "</td>";
+                                            echo "<td>" . @$department_name . "</td>";
+                                            echo "<td>" . @$personnel_name . "</td>";
+                                            echo "<td>" . @$device_name . "</td>";
+                                            echo "<td>" . @$value["date_added"] . "</td>";
+                                            echo "<td>" . @$value["date_modified"] . "</td>";
+                                            echo "<td>" . "<button type='button' 
                                 data-toggle='modal' 
                                 data-target='#addAssetModal' 
                                 data-id='" . @$value["id"] . "' 
@@ -111,11 +114,17 @@
                                 data-device_id='" . @$value["device_id"] . "' 
                                 data-status='" . @$value["status"] . "' 
                             class='btn btn-success btn-sm'>Edit</button>" . "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                                            echo "</tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -302,13 +311,13 @@
             $('#delet_asset').show();
 
 
-            $("#etype_id").load("<?php echo base_url('assets/list_asset_type?id='); ?>"+$(this).data('type_id'), function(response, status, xhr) {
+            $("#etype_id").load("<?php echo base_url('assets/list_asset_type?id='); ?>" + $(this).data('type_id'), function(response, status, xhr) {
                 if (status == "error") {
                     var msg = "Sorry but there was an error: ";
                     alert("Error");
                 }
             });
-            
+
 
         });
     });
@@ -343,7 +352,7 @@
     $(document).ready(function() {
         $("#assete_types_list").load("<?php echo base_url('assets/assete_types_index'); ?>");
     });
-    
+
     $('#btn_add_type').on("click", function() {
         if ($('#asset_type_name').val() == "") {
             alert("Write a asset type");

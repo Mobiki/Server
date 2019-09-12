@@ -63,6 +63,7 @@ class Gateways extends CI_Controller
             'lng' => $this->input->post("lng", true),
             'mac' => $this->input->post("mac", true),
             'description' => $this->input->post("description", true),
+            'status' => $this->input->post("status", true),
         );
         
         $this->Gateways_model->insert($data);
@@ -89,6 +90,7 @@ class Gateways extends CI_Controller
             'lng' => $this->input->post("lng", true),
             'mac' => $this->input->post("mac", true),
             'description' => $this->input->post("description", true),
+            'status' => $this->input->post("status", true),
         );
         $this->Gateways_model->update($id, $data);
         $this->toredis();

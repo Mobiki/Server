@@ -3,15 +3,15 @@
 class Users_model extends CI_Model
 {
     protected $table = 'users';
-    protected $md5key = '79bc58b970a431cc86aa06e98328227e'; //önemli
+    protected $users_role = 'users_role';
+
+    protected $md5key = '99fc58b970a431cc86aa06e98328249r'; //önemli
 
     function __construct()
     {
         parent::__construct();
     }
-
-    //users `id``role_id``name``email``password``phone``description``token`
-
+    //users
     public function get_all()
     {
         return $this->db->get($this->table)->result_array();
@@ -38,7 +38,7 @@ class Users_model extends CI_Model
     public function get_by_id($id)
     {
         $this->db->where('id', $id);
-        return $this->db->get($this->table)->result_array();
+        return $this->db->get($this->table)->row();
     }
 
     public function change_password($id, $password)
@@ -55,6 +55,7 @@ class Users_model extends CI_Model
         return $this->db->update($this->table);
     }
 
+    //login
     public function login_check($email, $password)
     {
         $this->db->where('email', $email);
@@ -99,5 +100,27 @@ class Users_model extends CI_Model
     {
         $data['password'] = md5($data['password'] . md5($this->md5key));
         return $this->db->insert($this->table, $data);
+    }
+
+    //users_role
+    public function get_all_users_role()
+    {
+        return $this->db->get($this->users_role)->result_array();
+    }
+
+    public function insert_users_role($data)
+    {
+        return $this->db->insert($this->users_role, $data);
+    }
+
+    public function delete_users_role($id)
+    {
+        return $this->db->delete($this->users_role, $id);
+    }
+
+    public function update_users_role($id, $data)
+    {
+        $this->db->where('id', $id);
+        return $this->db->update($this->users_role, $data);
     }
 }

@@ -12,6 +12,7 @@
                 <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <td>Status</td>
                             <td>Serial No</td>
                             <td>Gateway Name</td>
                             <td>Location</td>
@@ -35,7 +36,15 @@
                                     }
                                 }
                             }
+
+
+
                             echo "<tr>";
+                            if (@$value["status"]) {
+                                echo "<td>" . "<b  title='1' style='color:green;'>&#11044;</b>"  . "</td>";
+                            } else {
+                                echo "<td>" . "<b title='0' style='color:red;'>&#11044;</b>" . "</td>";
+                            }
                             echo "<td>" . @$value["mac"] . "</td>";
                             echo "<td>" . @$value["name"] . "</td>";
                             echo "<td>" . @$value["lat"] . "," . @$value["lng"] . "</td>";
@@ -56,6 +65,7 @@
                             data-lng='" . @$value["lng"] . "' 
                             data-zone_id='" . @$value["zone_id"] . "' 
                             data-description='" . @$value["description"] . "' 
+                            data-status='" . $value["status"] . "' 
                             class='btn btn-success btn-sm'>Edit</button>" . "</td>";
                             echo "</tr>";
                         }
@@ -97,13 +107,13 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="lat">Latitude</label>
-                                <input type="number" class="form-control" id="elat" name="lat" placeholder="">
+                                <input type="number" step="any" class="form-control" id="elat" name="lat" placeholder="">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="lng">Longitude</label>
-                                <input type="number" class="form-control" id="elng" name="lng" placeholder="">
+                                <input type="number" step="any" class="form-control" id="elng" name="lng" placeholder="">
                             </div>
                         </div>
                     </div>
@@ -126,6 +136,15 @@
                                 <?php } else { ?>
                                     <p> <a href="zones">Click to add a zone.</a></p>
                                 <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="custom-control custom-switch">
+                                <input type="hidden" id="estatus" name="status" value="" />
+                                <input type="checkbox" class="custom-control-input" id="ecstatus" name="cstatus" checked/>
+                                <label class="custom-control-label" for="status">Active</label>
                             </div>
                         </div>
                     </div>
@@ -157,6 +176,14 @@
 
 <?php $this->load->view('layout/down') ?>
 <script>
+    $("#ecstatus").change(function() {
+        if (this.checked) {
+            $("#estatus").val("1");
+        } else {
+            $("#estatus").val("0");
+        }
+    });
+
     $('.btn-success').each(function() {
         var $this = $(this);
 
@@ -170,6 +197,14 @@
             $('#elng').val($(this).data('lng'));
             $('#ezone_id').val($(this).data('zone_id'));
             $('#edescription').val($(this).data('description'));
+
+            $('#estatus').val($(this).data('status'));
+
+            if ($(this).data('status') == 1) {
+                $('#ecstatus').prop('checked', true);
+            } else {
+                $('#ecstatus').prop('checked', false);
+            }
 
             $('#btn_gateway_add').html("Edit Gateway");
             $('#modal_title').html("Edit Gateway");
@@ -189,7 +224,8 @@
         $('#elat').val("");
         $('#elng').val("");
         $('#ezone_id').val(1);
-
+        $('#estatus').val("1");
+        $('#ecstatus').prop('checked', true);
         $('#edescription').val("");
 
         $('#delet_gateway').hide();

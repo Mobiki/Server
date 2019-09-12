@@ -7,64 +7,66 @@
                 <h6 class="m-0 font-weight-bold text-primary"><button type="button" id="btn_add_personnel" data-toggle='modal' data-target='#addPersonnelModal' class="btn btn-primary btn-sm">Add Personnel</button></h6>
             </div>
             <div class="card-body">
-                <link rel="stylesheet" href="">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div style="font-size: small;">
+                            <div class="table-responsive">
+                                <table id="dataTable" class="table table-striped table-bordered table-hover" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <td>Status</td>
+                                            <td>Name</td>
+                                            <td>Image</td>
+                                            <td>Email</td>
+                                            <td>Type</td>
+                                            <td>Department</td>
+                                            <td>Device</td>
+                                            <td>Edit</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="personnel">
+                                        <?php
+                                        foreach (@$personnel as $key => $value) {
 
-                <table id="dataTable" class="table table-striped table-bordered table-hover" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <td>Status</td>
-                            <td>Name</td>
-                            <td>Image</td>
-                            <td>Email</td>
-                            <td>Type</td>
-                            <td>Department</td>
-                            <td>Device</td>
-                            <td>Edit</td>
-                        </tr>
-                    </thead>
-                    <tbody id="personnel">
-                        <?php
-                        foreach (@$personnel as $key => $value) {
+                                            foreach (@$departments as $key => $dvalue) {
+                                                if ($dvalue["id"] == $value["department_id"]) {
+                                                    $department_name = $dvalue["name"];
+                                                    break;
+                                                } else {
+                                                    $department_name = "";
+                                                }
+                                            }
 
-                            foreach (@$departments as $key => $dvalue) {
-                                if ($dvalue["id"] == $value["department_id"]) {
-                                    $department_name = $dvalue["name"];
-                                    break;
-                                } else {
-                                    $department_name = "";
-                                }
-                            }
+                                            foreach (@$personnel_type as $key => $dvalue) {
+                                                if ($dvalue["id"] == $value["type_id"]) {
+                                                    $type_name = $dvalue["name"];
+                                                    break;
+                                                } else {
+                                                    $type_name = "";
+                                                }
+                                            }
+                                            foreach (@$devices as $key => $dvalue) {
+                                                if ($dvalue["id"] == $value["device_id"]) {
+                                                    $device_name = $dvalue["name"];
+                                                    break;
+                                                } else {
+                                                    $device_name = "";
+                                                }
+                                            }
 
-                            foreach (@$personnel_type as $key => $dvalue) {
-                                if ($dvalue["id"] == $value["type_id"]) {
-                                    $type_name = $dvalue["name"];
-                                    break;
-                                } else {
-                                    $type_name = "";
-                                }
-                            }
-                            foreach (@$devices as $key => $dvalue) {
-                                if ($dvalue["id"] == $value["device_id"]) {
-                                    $device_name = $dvalue["name"];
-                                    break;
-                                } else {
-                                    $device_name = "";
-                                }
-                            }
-
-                            echo "<tr>";
-                            if (@$value["status"] == 1) {
-                                echo "<td>" . "<b style='color:green;'>&#11044;</b>" . "</td>";
-                            } else {
-                                echo "<td>" . "<b style='color:red;'>&#11044;</b>" . "</td>";
-                            }
-                            echo "<td>" . @$value["name"] . "</td>";
-                            echo "<td>" . "<img style='height: 35px;' src='" . "assets/images/personnel/" . @$value["image"] . "'/></td>";
-                            echo "<td>" . @$value["email"] . "</td>";
-                            echo "<td>" . @$type_name . "</td>";
-                            echo "<td>" . @$department_name . "</td>";
-                            echo "<td>" . @$device_name . "</td>";
-                            echo "<td>" . "<button type='button' data-toggle='modal' data-target='#addPersonnelModal' 
+                                            echo "<tr>";
+                                            if (@$value["status"] == 1) {
+                                                echo "<td>" . "<b style='color:green;'>&#11044;</b>" . "</td>";
+                                            } else {
+                                                echo "<td>" . "<b style='color:red;'>&#11044;</b>" . "</td>";
+                                            }
+                                            echo "<td>" . @$value["name"] . "</td>";
+                                            echo "<td>" . "<img style='height: 35px;' src='" . "assets/images/personnel/" . @$value["image"] . "'/></td>";
+                                            echo "<td>" . @$value["email"] . "</td>";
+                                            echo "<td>" . @$type_name . "</td>";
+                                            echo "<td>" . @$department_name . "</td>";
+                                            echo "<td>" . @$device_name . "</td>";
+                                            echo "<td>" . "<button type='button' data-toggle='modal' data-target='#addPersonnelModal' 
                                             data-id='" . @$value["id"] . "' 
                                             data-name='" . @$value["name"] . "' 
                                             data-image='" . @$value["image"] . "' 
@@ -75,11 +77,15 @@
                                             data-device_id='" . $value["device_id"] . "' 
                                             data-status='" . $value["status"] . "' 
                                             class='btn btn-success btn-sm'>Edit</button>" . "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                                            echo "</tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

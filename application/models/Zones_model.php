@@ -17,7 +17,7 @@ class Zones_model extends CI_Model
     public function get_by_id($id)
     {
         $this->db->where('id', $id);
-        return $this->db->get($this->table)->result_array();
+        return $this->db->get($this->table)->row();
     }
 
     public function insert($data)

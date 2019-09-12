@@ -2,7 +2,7 @@
 
 
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-<label for="d_type" style="padding-top: 6px; margin-right: 16px;"> Device Type:  </label><?php foreach (@$devices_type as $key => $dtvalue) { ?>
+    <label for="d_type" style="padding-top: 6px; margin-right: 16px;"> Device Type: </label><?php foreach (@$devices_type as $key => $dtvalue) { ?>
         <li class="nav-item">
             <a class="nav-link <?php if (@$dtvalue["id"] == "1") { ?>active<?php } ?>" id="pills-<?php echo @$dtvalue["id"]; ?>-tab" data-toggle="pill" href="#pills-<?php echo $dtvalue["id"]; ?>" role="tab" aria-selected="<?php if ($dtvalue["id"] == "1") { ?>true<?php } else { ?>false<?php } ?>"><?php echo $dtvalue["name"]; ?></a>
         </li>
@@ -113,7 +113,7 @@
                         </div>
 
                         <div class="col-2" style="vertical-align: middle">
-                            <div class="form-group" >
+                            <div class="form-group">
                                 <button type="button" id="btn_add_type" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i></button>
                             </div>
                         </div>

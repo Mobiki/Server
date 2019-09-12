@@ -1,36 +1,5 @@
 <?php $this->load->view('layout/up') ?>
-
-<?php
-/*foreach (@$departments as $key => $value) {
-
-    if ($value["parent_id"] == 0) {
-        echo $value["name"] . " || <br>";
-        h($departments, $value["name"], $value["id"], $value["parent_id"]);
-        echo " <br>";
-    }
-}
-
-function h($departments, $name, $id, $pid)
-{
-    $a = 0;
-    foreach ($departments as $key => $value) {
-        $a = $a + 1;
-        $z = "";
-        if ($value["parent_id"] == $id) {
-
-
-            for ($i = 0; $i < $a; $i++) {
-                $z = $z . "-";
-            }
-            echo $z . $value["name"] . " __ <br>";
-            h($departments, $value["name"], $value["id"], $value["parent_id"]);
-        }
-    }
-}*/
-?>
-
-
-
+<link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap-treeview.min.css"); ?>">
 
 <div class="row">
     <div class="col-md-12">
@@ -40,7 +9,8 @@ function h($departments, $name, $id, $pid)
             </div>
             <div class="card-body">
                 <div class="row">
-            <iframe  src="<?php echo base_url("departments/departments_treeview");?>" style="border: none;" width="100%" height="700px"></iframe>
+                    <div class="col-12" id="treeview_json">
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,34 +87,15 @@ function h($departments, $name, $id, $pid)
 
 
 <?php $this->load->view('layout/down') ?>
+<script type="text/javascript" charset="utf8" src="<?php echo base_url("assets/js/bootstrap-treeview.min.js"); ?>"></script>
 
 
 
 <script>
-    $('.btn-success').each(function() {
-        var $this = $(this);
-        $this.on("click", function() {
-            $('#form_edit').attr('action', 'departments/edit');
-            $('#modal_title').html("Edit Department");
-            $('#btn_department_add').html("Edit Department");
-
-            $('#eid').val($(this).data('id'));
-            $('#ename').val($(this).data('name'));
-            $('#eparent_id').val($(this).data('parent_id'));
-            $('#eexpiry_date').val($(this).data('expiry_date'));
-
-            $('#did').val($(this).data('id'));
-            $('#cid').val($(this).data('id'));
-
-            $('#delet_department').show();
-            $('#password_section').hide();
-        });
-    });
-
     $('#btn_add_department').on("click", function() {
         $('#modal_title').html("Add Department");
         $('#btn_department_add').html("Add Department");
-        $('#form_edit').attr('action', 'departments/add');
+        $('#form_edit').attr('action', '<?php echo base_url("departments/add"); ?>');
         $('#eid').val("");
         $('#ename').val("");
         $('#eparent_id').val(0);
@@ -154,7 +105,75 @@ function h($departments, $name, $id, $pid)
         $('#delet_department').hide();
     });
 
+
+    function btn_edit(id) {
+        $('#modal_title').html("Edit Departments");
+        $('#btn_department_add').html("Edit Departments");
+
+        $('#delet_department').show();
+        $('#did').val(id);
+
+        //get json
+        $.getJSON('<?php echo base_url("departments/get_by_id?id="); ?>' + id, function(data) {
+            $('#eid').val(id);
+            $('#ename').val(data.name);
+            $('#eparent_id').val(data.parent_id);
+            $('#eexpiry_date').val(data.expiry_date);
+        });
+
+        $('#form_edit').attr('action', '<?php echo base_url("departments/edit"); ?>');
+        console.log(id);
+        $('#addDepartmentModal').modal('show');
+    }
+
     $(document).ready(function() {
-        $('#dataTable').DataTable();
+
+        var treeData;
+
+        $.ajax({
+            type: "GET",
+            url: "<?php echo base_url("departments/treeview"); ?>",
+            dataType: "json",
+            success: function(response) {
+                initTree(response)
+            }
+        });
+
+        function initTree(treeData) {
+            $('#treeview_json').treeview({
+                data: treeData
+            });
+        }
+
     });
 </script>
+
+
+<?php
+/*foreach (@$departments as $key => $value) {
+
+    if ($value["parent_id"] == 0) {
+        echo $value["name"] . " || <br>";
+        h($departments, $value["name"], $value["id"], $value["parent_id"]);
+        echo " <br>";
+    }
+}
+
+function h($departments, $name, $id, $pid)
+{
+    $a = 0;
+    foreach ($departments as $key => $value) {
+        $a = $a + 1;
+        $z = "";
+        if ($value["parent_id"] == $id) {
+
+
+            for ($i = 0; $i < $a; $i++) {
+                $z = $z . "-";
+            }
+            echo $z . $value["name"] . " __ <br>";
+            h($departments, $value["name"], $value["id"], $value["parent_id"]);
+        }
+    }
+}*/
+?>
