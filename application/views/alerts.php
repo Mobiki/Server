@@ -91,4 +91,48 @@
             console.log("error");
         }
     }, 10000);
+
+
+
+
+    $(document).ready(function() {
+        $('#closed_alerts').DataTable({
+            destroy: true,
+            "processing": true,
+            "order": [
+                [2, "asc"]
+            ],
+            "ajax": {
+                "url": "<?php echo base_url("alert/get_logs?person_id="); ?>" + $('#eid').val(),
+                dataSrc: ''
+            },
+            "columns": [{
+                    "data": "gateway_name"
+                }, {
+                    "data": "date_time"
+                    /*"render": function(data, type, now) {
+                        var timestamp = data;
+                        var date = new Date(timestamp * 1000);
+                        var year = date.getFullYear();
+                        var month = date.getMonth() + 1;
+                        var day = date.getDate();
+                        var hours = date.getHours();
+                        var minutes = date.getMinutes();
+                        var seconds = date.getSeconds();
+                        return year + "/" + month + "/" + day + " " + hours + ":" + minutes + ":" + seconds;
+                    }*/
+                },
+                {
+                    "data": "epoch"
+                },
+                {
+                    "data": "status"
+                }
+            ],
+            "columnDefs": [{
+                "targets": [2],
+                "visible": false
+            }]
+        });
+    });
 </script>

@@ -1,7 +1,6 @@
 <?php $this->load->view('layout/up') ?>
 
-
-<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+<ul class="nav nav-tabs" id="pills-tab" role="tablist">
     <label for="d_type" style="padding-top: 6px; margin-right: 16px;"> Device Type: </label><?php foreach (@$devices_type as $key => $dtvalue) { ?>
         <li class="nav-item">
             <a class="nav-link <?php if (@$dtvalue["id"] == "1") { ?>active<?php } ?>" id="pills-<?php echo @$dtvalue["id"]; ?>-tab" data-toggle="pill" href="#pills-<?php echo $dtvalue["id"]; ?>" role="tab" aria-selected="<?php if ($dtvalue["id"] == "1") { ?>true<?php } else { ?>false<?php } ?>"><?php echo $dtvalue["name"]; ?></a>
@@ -9,28 +8,21 @@
     <?php } ?>
 
     <li class="nav-item">
-        <a class="nav-link <?php if (count(@$devices_type) == 0) {
-                                echo "active";
-                            } ?>" id="pills-add-tab" data-toggle="modal" data-target='#addDeviceTypeModal' href="#pills-add" role="tab" aria-selected="false"><strong> + </strong></a>
+        <a class="nav-link" id="pills-add-tab" data-toggle="modal" data-target='#addDeviceTypeModal' href="#pills-add" role="tab" aria-selected="false"><strong> + </strong></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="btn_add_device" data-toggle='modal' data-target='#addDeviceModal' role="tab" aria-selected="false" style="color: white;background-color: #007bff;">Add Device</a>
     </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
     <?php foreach (@$devices_type as $key => $dtvalue) { ?>
         <div class="tab-pane fade <?php if (@$dtvalue["id"] == "1") { ?>show active<?php } ?>" id="pills-<?php echo @$dtvalue["id"]; ?>" role="tabpanel" aria-labelledby="pills-<?php echo $dtvalue["id"]; ?>-tab">
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header py-3">
-                            <?php
-                                ?>
-                            <h6 class="m-0 font-weight-bold text-primary"><button type="button" id="btn_add_device" data-toggle='modal' data-target='#addDeviceModal' class="btn btn-primary btn-sm">Add Devices </button></h6>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive" id="datatable">
                                 <link rel="stylesheet" href="">
-
-
                                 <table id="dataTable" class="table table-striped table-bordered table-hover" style="width: 100%;">
                                     <thead>
                                         <tr>
@@ -48,7 +40,6 @@
                                         <?php
                                             foreach (@$devices as $key => $value) {
                                                 if (@$value["type_id"] == @$dtvalue["id"]) {
-
                                                     echo "<tr>";
                                                     echo "<td>" . @$value["id"] . "</td>";
                                                     if (@$value["status"] == 1) {
@@ -86,7 +77,6 @@
     <?php } ?>
 </div>
 
-
 <div class="modal fade bd-modal-lg" id="addDeviceTypeModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -111,7 +101,6 @@
                                 <input type="text" class="form-control" id="device_type_description" name="description" placeholder="" value="">
                             </div>
                         </div>
-
                         <div class="col-2" style="vertical-align: middle">
                             <div class="form-group">
                                 <button type="button" id="btn_add_type" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i></button>
@@ -121,14 +110,11 @@
                 </form>
                 <hr>
                 <div id="device_types_list">
-
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="modal fade bd-modal-lg" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -181,7 +167,7 @@
                             <div class="custom-control custom-switch">
                                 <input type="hidden" id="estatus" name="status" value="1" />
                                 <input type="checkbox" class="custom-control-input" id="ecstatus" name="cstatus" checked>
-                                <label class="custom-control-label" for="status">Active</label>
+                                <label class="custom-control-label" for="ecstatus">Active</label>
                             </div>
                         </div>
                     </div>
@@ -206,7 +192,6 @@
 </div>
 
 <?php $this->load->view('layout/down') ?>
-
 
 <script>
     $("#ecstatus").change(function() {
@@ -238,7 +223,7 @@
             } else {
                 $('#ecstatus').prop('checked', false);
             }
-
+            $('#btn_device_add').html("Save");
             $('#delet_device').show();
         });
     });
@@ -263,12 +248,8 @@
         $('#estatus').val("1");
         $('#ecstatus').prop('checked', true);
         $('#edescription').val("");
-
+        $('#btn_device_add').html("Add Device");
         $('#etype_id').find('option:eq(0)').prop('selected', true);
-    });
-
-    $('#btn_device_add').on("click", function() {
-
     });
 
 

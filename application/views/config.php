@@ -119,7 +119,7 @@
                 </div>
                 <hr>
                 <br>
-                <form id="admin" action="config/setadmin" method="post">
+                <form id="admin" action="<?php echo base_url("config/setadmin");?>" method="post">
                     <div class="row">
                         <div class="col-4">
                         </div>

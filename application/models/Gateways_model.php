@@ -59,4 +59,11 @@ class Gateways_model extends CI_Model
         $this->db->where('id', $id);
         return $this->db->delete($this->table);
     }
+
+    public function get_all_type()
+    {
+        return $this->db->get("gateway_type")
+            ->result_array();
+        //->result();
+    }
 }

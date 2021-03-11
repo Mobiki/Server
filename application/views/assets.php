@@ -3,10 +3,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">
-                    <button type="button" id="btn_add_asset" data-toggle='modal' data-target='#addAssetModal' class="btn btn-primary btn-sm">Add Asset</button></button></h6>
-            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -23,6 +19,7 @@
                                             <td>Type</td>
                                             <td>Manufacturer</td>
                                             <td>Department</td>
+                                            <td>Zone</td>
                                             <td>Personnel</td>
                                             <td>Device</td>
                                             <td>Date Added</td>
@@ -42,6 +39,18 @@
                                                         break;
                                                     } else {
                                                         $department_name = "";
+                                                    }
+                                                }
+                                            }
+                                            if (@$value["zone_id"] == 0) {
+                                                $zone_name = "";
+                                            } else {
+                                                foreach (@$zones as $key => $zone) {
+                                                    if ($zone["id"] == $value["zone_id"]) {
+                                                        $zone_name = $zone["name"];
+                                                        break;
+                                                    } else {
+                                                        $zone_name = "";
                                                     }
                                                 }
                                             }
@@ -94,6 +103,7 @@
                                             echo "<td>" . $type_name . "</td>";
                                             echo "<td>" . @$value["manufacturer"] . "</td>";
                                             echo "<td>" . @$department_name . "</td>";
+                                            echo "<td>" . @$zone_name . "</td>";
                                             echo "<td>" . @$personnel_name . "</td>";
                                             echo "<td>" . @$device_name . "</td>";
                                             echo "<td>" . @$value["date_added"] . "</td>";
@@ -109,6 +119,7 @@
                                 data-manufacturer='" . @$value["manufacturer"] . "' 
                                 data-description='" . @$value["description"] . "' 
                                 data-department_id='" . @$value["department_id"] . "' 
+                                data-zone_id='" . @$value["zone_id"] . "' 
                                 data-personnel_id='" . @$value["personnel_id"] . "' 
                                 data-type_id='" . @$value["type_id"] . "' 
                                 data-device_id='" . @$value["device_id"] . "' 
@@ -265,6 +276,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                    <div class="col-6">
+                            <div class="form-group">
+                                <label for="zone_id">Zone</label>
+                                <select class="form-control" id="ezone_id" name="zone_id" required>
+                                    <?php foreach (@$zones as $key => $zone) { ?>
+                                        <option value="<?php echo $zone["id"]; ?>"><?php echo $zone["name"]; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
                     <div class="row">
                         <div class="col-12">
@@ -289,13 +312,15 @@
 </div>
 
 <?php $this->load->view('layout/down') ?>
+<script type="text/javascript" src="https://cdn.datatables.net/w/dt/dt-1.10.18/b-1.5.6/datatables.min.js"></script>
+
 <script>
     $('.btn-success').each(function() {
         var $this = $(this);
         $this.on("click", function() {
             $('#form_edit').attr('action', '<?php echo base_url('assets/edit'); ?>');
             $('#modal_title').html("Edit Asset");
-            $('#btn_asset_add').html("Edit Asset");
+            $('#btn_asset_add').html("Save");
             $('#eid').val($(this).data('id'));
             $('#ename').val($(this).data('name'));
             $("#asset_photo").attr("src", "<?php echo base_url('assets/images/assets/'); ?>" + $(this).data('image'));
@@ -304,6 +329,7 @@
             $('#emanufacturer').val($(this).data('manufacturer'));
             $('#edescription').val($(this).data('description'));
             $('#edepartment_id').val($(this).data('department_id'));
+            $('#ezone_id').val($(this).data('zone_id'));
             $('#epersonnel_id').val($(this).data('personnel_id'));
             $('#edevice_id').val($(this).data('device_id'));
 
@@ -323,6 +349,23 @@
     });
 
     $('#btn_add_asset').on("click", function() {
+
+    });
+
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            dom: 'lBfrtip',
+                buttons: [{
+                    text: 'Add Asset',
+                    action: function(e, dt, node, config) {
+                        open_add_modal();
+                    }
+                },],
+        });
+    });
+
+    function open_add_modal() {
+        $('#addAssetModal').modal('toggle');
         $('#modal_title').html("Add Asset");
         $('#btn_asset_add').html("Add Asset");
         $('#form_edit').attr('action', '<?php echo base_url('assets/add'); ?>');
@@ -333,6 +376,7 @@
         $('#emanufacturer').val("");
         $('#edescription').val("");
         $('#edepartment_id').val(0);
+        $('#ezone_id').val(0);
         $('#epersonnel_id').val(0);
         $('#edevice_id').val(0);
 
@@ -342,12 +386,7 @@
 
         $("#etype_id").load("<?php echo base_url('assets/list_asset_type'); ?>");
         $('#etype_id').val(0);
-    });
-
-    $(document).ready(function() {
-        $('#dataTable').DataTable();
-    });
-
+    }
 
     $(document).ready(function() {
         $("#assete_types_list").load("<?php echo base_url('assets/assete_types_index'); ?>");

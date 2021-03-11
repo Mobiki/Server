@@ -12,7 +12,17 @@ $client = new Predis\Client([
     'password' => $this->config->item('redis_auth')
 ]);
 
-$pubsub = $client->pubSubLoop();
+
+$client->pubSubLoop(['subscribe' => 'gateways'], function ($l, $msg) {
+    if ($msg->payload === 'unsub') {
+        return false;
+    } else {
+        echo "$msg->payload on $msg->channel", PHP_EOL;
+    }
+});
+
+
+/*$pubsub = $client->pubSubLoop();
 
 $pubsub->subscribe('gateways');
 
@@ -37,6 +47,6 @@ foreach ($pubsub as $message) {
             break;
     }
 }
-die();
+die();*/
 
 ?>

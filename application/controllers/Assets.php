@@ -14,6 +14,7 @@ class Assets extends CI_Controller
         $this->load->model("Personnel_model");
         $this->load->model("Departments_model");
         $this->load->model("Devices_model");
+        $this->load->model("Zones_model");
 
         $this->load->helper(array('form', 'url'));
     }
@@ -36,6 +37,7 @@ class Assets extends CI_Controller
         $asset_type = $this->Assets_model->get_all_asset_type();
         $departments = $this->Departments_model->get_all();
         $devices = $this->Devices_model->get_all();
+        $zones = $this->Zones_model->get_all();
 
         $data = array(
             'pageId' => 8,
@@ -44,6 +46,7 @@ class Assets extends CI_Controller
             'asset_type' => $asset_type,
             'personnel' => $personnel,
             'departments' => $departments,
+            'zones' => $zones,
             'devices' => $devices,
         );
         $this->load->view('assets', $data);
@@ -68,6 +71,7 @@ class Assets extends CI_Controller
                 'serial_number' => $this->input->post('serial_number', true),
                 'manufacturer' => $this->input->post('manufacturer', true),
                 'department_id' => $this->input->post('department_id', true),
+                'zone_id' => $this->input->post('zone_id', true),
                 'personnel_id' => $this->input->post('personnel_id', true),
                 'description' => $this->input->post('description', true),
                 'device_id' => $this->input->post('device_id', true),
@@ -88,6 +92,7 @@ class Assets extends CI_Controller
                 'type_id' => $this->input->post('type_id', true),
                 'description' => $this->input->post('description', true),
                 'department_id' => $this->input->post('department_id', true),
+                'zone_id' => $this->input->post('zone_id', true),
                 'personnel_id' => $this->input->post('personnel_id', true),
                 'device_id' => $this->input->post('device_id', true),
                 'serial_number' => $this->input->post('serial_number', true),
@@ -143,6 +148,7 @@ class Assets extends CI_Controller
                 'serial_number' => $this->input->post('serial_number', true),
                 'manufacturer' => $this->input->post('manufacturer', true),
                 'department_id' => $this->input->post('department_id', true),
+                'zone_id' => $this->input->post('zone_id', true),
                 'personnel_id' => $this->input->post('personnel_id', true),
                 'description' => $this->input->post('description', true),
                 'device_id' => $this->input->post('device_id', true),
@@ -159,6 +165,7 @@ class Assets extends CI_Controller
                 'type_id' => $this->input->post('type_id', true),
                 'description' => $this->input->post('description', true),
                 'department_id' => $this->input->post('department_id', true),
+                'zone_id' => $this->input->post('zone_id', true),
                 'personnel_id' => $this->input->post('personnel_id', true),
                 'device_id' => $this->input->post('device_id', true),
                 'serial_number' => $this->input->post('serial_number', true),

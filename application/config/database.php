@@ -3,11 +3,11 @@ $active_group = "default";
 $query_builder = TRUE;
 
 $db["default"] = array(
-	"dsn"	=> "mysql:host=localhost;dbname=openmobiki",
+	"dsn"	=> "mysql:host=localhost;dbname=test2",
 	"hostname" => "localhost",
 	"username" => "root",
 	"password" => "",
-	"database" => "openmobiki",
+	"database" => "test2",
 	"dbdriver" => "mysqli",
 	"dbprefix" => "",
 	"pconnect" => FALSE,

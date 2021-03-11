@@ -8,6 +8,13 @@ class Users extends CI_Controller
         parent::__construct();
         $this->load->model("Users_model");
         //header('Content-Type: application/json');
+
+        $user_data = $this->session->userdata('userdata');
+
+
+if ($user_data["role_id"]==2) {
+    redirect('dashboard');
+}
     }
 
     public function index()

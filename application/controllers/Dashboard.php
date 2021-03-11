@@ -31,9 +31,19 @@ class Dashboard extends CI_Controller
 
     public function index()
     {
+        $client = $this->redis();
+        $devices = json_decode($client->get("devices"), true);
+        $device_types = json_decode($client->get("device_type"), true);
+        $personnel = json_decode($client->get("personnel"), true);
+        $gateways = json_decode($client->get("gateways"), true);
+
         $data = array(
             'pageId'    =>  1,
             'pageName' => 'Dashboard',
+            'devices' => $devices,
+            'device_types' => $device_types,
+            'personnel' => $personnel,
+            'gateways' => $gateways,
         );
 
         $this->load->view('dashboard', $data);

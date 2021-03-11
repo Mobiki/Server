@@ -1,27 +1,24 @@
 <?php $this->load->view('layout/up') ?>
 
-
-
-
-
-
-
-
+<?php $user_data = $this->session->userdata('userdata'); ?>
 
 <link rel="stylesheet" href="<?php echo base_url("assets/css/app.css"); ?>">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="*" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 
-<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin="*"></script>
-
-<!--link rel="stylesheet" href="/css/leaflet.css"
-          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-          crossorigin="*"/>
-    <script src="/js/leaflet.js"
-            integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-            crossorigin="*"></script-->
 
 <article class="content responsive-tables-page">
     <section class="section">
+    <?php if ($user_data["role_id"]==1) {?>
+        <div class="row">
+            <?php if ($user_data["role_id"]==1) {?>
+                <?php }?>
+            <div class="col-md-3">
+            <a href="<?php echo base_url("livemap/edit"); ?>" type="button" class="btn btn-primary btn-sm">Edit map</a>
+            </div>
+        </div>
+        <br>
+        <?php }?>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -40,213 +37,14 @@
 
 <?php $this->load->view('layout/down') ?>
 
-<script type="text/javascript" src="<?php echo base_url("assets/js/socket.io.js"); ?>"> </script>
 <script type="text/javascript" language="javascript" src="<?php echo base_url("assets/js/jquery-3.3.1.js"); ?>"></script>
 
 <script type="text/javascript" language="javascript">
-    var datatableObj = [];
-
-    var Marker = [];
-
-    <?php //foreach ($gwList as $row){ 
-    ?>
-    /*datatableObj.push(
-        {
-            "isActive":"{{$row['isActive']}}"
-            ,"name":"{{$row['name']}}"
-            ,"mac":"{{$row['mac']}}"
-            ,"lat":"{{$row['lat']}}"
-            ,"lon":"{{$row['lon']}}"
-        }
-    );*/
-    datatableObj.push({
-        "isActive": "active",
-        "name": "ofice",
-        "mac": "ac233fc00629",
-        "lat": "40.919807",
-        "lon": "29.315383"
-    });
-    datatableObj.push({
-        "isActive": "active",
-        "name": "4A Giriş",
-        "mac": "ac233fc00676",
-        "lat": "40.919676",
-        "lon": "29.315186"
-    });
-    <?php //} 
-    ?>
-
-
-
-    class Map {
-        constructor() {
-            this.map = L.map('map', {
-                renderer: L.svg({
-                    padding: 100 //değer haritanın düzgün bir şekilde renderlanabilmesi için çok önemli
-                })
-            }).setView([40.9194102, 29.315826], 40)
-            //}).setView([40.9882717,28.8259847], 18)
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-                attribution: 'Mobiki',
-                id: 'mapbox.streets',
-            }).addTo(this.map)
-
-            this.markers = L.layerGroup()
-            this.setZooms()
-            this.drawMap()
-        }
-
-
-        setZooms() {
-            // zoomları sınırlayan fonksiyon
-            this.map._layersMaxZoom = 40
-            this.map._layersMinZoom = 10
-        }
-
-        setBounds(bounds) {
-            // haritanın çok fazla scrollanmasını engellemek için sınırlarının belirlendiği kısım
-            let limits = bounds
-            limits._northEast.lat += .0001
-            limits._northEast.lng += .01
-            limits._southWest.lat -= .0001
-            limits._southWest.lng -= .01
-            this.map.fitBounds(bounds)
-            this.map.setMaxBounds(limits)
-        }
-
-
-        addMarker(data) {
-            /*
-                daha kiisel bir marker için leafletin sitesinde custom markerlar var.
-                ben şimdilik sadece pozisyon ve deneme bir popupu ve üzerinde veri gösterilen bir marker ekliyorum.
-                gerisi senin keyfine kalmış.
-            */
-            //debugger;
-            const {
-                location,
-                lat,
-                lng,
-                personName,
-                gw_name
-            } = data
-
-            // lokasyonu da parçaladım. keyfine bağlı nasıl kullanacağın.
-            //const parsedLocation = location.split('#')
-            //const lat = parsedLocation[0]
-            //const lng = parsedLocation[1]
-
-            // şuan bulunan markerler içerisinde ada göre arama yapıyorum. ad şimdilik eşsiz değer olarak kullanılıyor. başka daha mantıklı bir eşsiz değer kullanılabilir.
-            let isExist = this.markers.getLayers().find((layer) => layer.options.name == personName)
-
-            // bu eşsiz değere sahip layer bulunuyorsa ve bu eşsiz değere sahip layerden lat lnglerden biri değişmiş ise if true döner
-            if (isExist && (isExist._latlng.lat != lat || isExist._latlng.lng != lng)) {
-                // bu durumda bu layerin konumunu güncelleriz
-                isExist.setLatLng(new L.LatLng(lat, lng))
-            } else if (!isExist) {
-                // eğer layer hiç mapa eklenmemişse yeni bir layer(marker) eklenir
-
-                let marker = new L.Marker([lat, lng], {
-                    name: personName //identifer olarak kullanıyorum. daha mantıklı eşsiz bir değişken kullanılabilir
-                }).bindPopup(personName + ' - ' + gw_name).addTo(this.markers)
-                this.markers.addTo(this.map)
-                marker.openPopup()
-            }
-        }
-
-        drawMap() {
-            // burada da bayağı bir şey dönüyor. loglayarak ne nedir bulnuabilir yada konuşabiirz üerinde.
-            let data = RealTimePage.osm2geojson(RealTimePage.xml)
-
-            let geoJsonLayer = L.geoJson(data, {
-                style: (feature) => {
-                    let color = feature.properties.color
-                    return {
-                        color: '#' + color,
-                        fill: '#' + color,
-                        fillOpacity: 1,
-                        opacity: 1
-                    }
-                },
-                filter: (feature, layer) => (
-                    (feature.geometry.type === 'LineString' && typeof feature.geometry.coordinates !== 'undefined' && feature.geometry.coordinates.length >= 3 && typeof feature.geometry.type !== 'undefined')
-                ),
-                onEachFeature: (feature, layer) => {
-                    layer.on({
-                        //click: () => alert(feature.properties.id), //tıklayınca id
-                    })
-                }
-            })
-            geoJsonLayer.addTo(this.map)
-            //this.setBounds(geoJsonLayer.getBounds())
-        }
-    }
-
     var RealTimePage = {
-        
-        //xml : `{!!$xml!!}`,
-
         xml: `<?php print_r($xml); ?>`,
-        mymap: undefined,
-        socket: undefined,
-
-        /*maker1: undefined,
-        maker2: undefined,
-        maker3: undefined,*/
-
         load: function() {
             //RealTimePage.cometConnect('ac');
         },
-        /*getComet: function() {
-            RealTimePage.socket.on('news', function(msg) {
-
-                var gelen = JSON.parse(msg);
-
-                if (gelen.GW_MAC != '') {
-                    $.each(datatableObj, function(indx, datasi) {
-
-                        if (datasi.mac.toUpperCase() == gelen.GW_MAC) {
-                            debugger;
-
-                            if (RealTimePage.maker1 == undefined)
-                                RealTimePage.maker1 = L.marker([datasi.lat, datasi.lon]).addTo(this.map);
-                            else if (RealTimePage.maker2 == undefined)
-                                RealTimePage.maker2 = L.marker([datasi.lat, datasi.lon]).addTo(this.map);
-
-                        }
-
-                    });
-                }
-            });
-        },*/
-
-        /*cometConnect: function(islem) {
-            if (islem != 'ac') {
-                if (RealTimePage.socket == undefined)
-                    return;
-
-                RealTimePage.socket.disconnect();
-            } else {
-                if (true)
-                    RealTimePage.socket = io('https://realtime.mobiki.link:3000');
-                else
-                    RealTimePage.socket = io('http://78.46.112.41:3000');
-                //RealTimePage.socket = io('http://realtime.mobiki.link:8081/');
-
-                RealTimePage.socket.on('connect', function() {});
-                RealTimePage.socket.on('event', function(data) {
-                    debugger;
-                });
-                RealTimePage.socket.on('disconnect', function() {});
-
-                RealTimePage.getComet();
-            }
-
-            RealTimePage.socket.on('connect_error', function() {
-                //$('#statusSpan').html('Bağlantı tekrar deneniyor.');
-            });
-        },*/
-
-
         osm2geojson: function(osm, metaProperties) {
             var count = 0;
             var xml = parse(osm),
@@ -326,32 +124,26 @@
 
             function Points(nodeCache) {
                 let features = [];
-
                 for (var node in nodeCache) {
                     var tags = getBy(nodeCache[node], 'tag');
                     if (!usedCoords[node] || tags.length)
                         features.push(getFeature(nodeCache[node], 'Point', lonLat(nodeCache[node])));
                 }
-
                 return features;
             }
 
             function cacheWays() {
                 var ways = getBy(xml, 'way'),
                     out = {};
-
                 for (var w = 0; w < ways.length; w++) {
                     var feature = {},
                         nds = getBy(ways[w], 'nd');
-
                     /*if (attr(nds[0], 'ref') === attr(nds[nds.length - 1], 'ref')) {
                         feature = getFeature(ways[w], 'Polygon', [[]]);
                     } else {
                         feature = getFeature(ways[w], 'LineString');
                     }*/
-
                     feature = getFeature(ways[w], 'LineString');
-
                     for (var n = 0; n < nds.length; n++) {
                         var node = nodeCache[attr(nds[n], 'ref')];
                         if (node) {
@@ -373,30 +165,23 @@
                 var relations = getBy(xml, 'relation'),
                     relations_length = relations.length,
                     features = [];
-
                 for (var r = 0; r < relations_length; r++) {
                     var feature = getFeature(relations[r], 'MultiPolygon');
-
                     if (feature.properties.type === 'multipolygon') {
                         var members = getBy(relations[r], 'member');
-
                         // osm doesn't keep roles in order, so we do this twice
                         for (var m = 0; m < members.length; m++) {
                             if (attr(members[m], 'role') === 'outer') assignWay(members[m], feature);
                         }
-
                         for (var n = 0; n < members.length; n++) {
                             if (attr(members[n], 'role') === 'inner') assignWay(members[n], feature);
                         }
-
                         delete feature.properties.type;
                     } else {
                         // http://taginfo.openstreetmap.us/relations
                     }
-
                     if (feature.geometry.coordinates.length) features.push(feature);
                 }
-
                 return features;
 
                 function assignWay(member, feature) {
@@ -477,63 +262,136 @@
             function isNumber(n) {
                 return !isNaN(parseFloat(n)) && isFinite(n);
             }
+
             function attr(x, y) {
                 return x.getAttribute(y);
             }
+
             function attrf(x, y) {
                 return parseFloat(x.getAttribute(y));
             }
+
             function getBy(x, y) {
                 return x.getElementsByTagName(y);
             }
+
             function lonLat(elem) {
                 return [attrf(elem, 'lon'), attrf(elem, 'lat')];
             }
+
             function setIf(x, y, o, name, f) {
                 if (attr(x, y)) o[name] = f ? parseFloat(attr(x, y)) : attr(x, y);
             }
         }
     };
 
+    //http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+    //https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw
 
-    $.noConflict();
-    jQuery(document).ready(function($) {
-        //RealTimePage.load(); RealTimePage.initMap();
-        RealTimePage.load();
-        const map = new Map();
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmAttrib = 'Mobiki';
 
-        setInterval(function() {
-
-            //map.addMarker({'location':'40.9194102, 29.315826','personName':'test','gw_name':'GW NAME'});
-
-            <?php foreach ($devices as $key => $dvalue) { ?>
-
-                $.get("<?php echo base_url('livemap/getLastDeviceInfo?mac='.$dvalue["mac"]);?>", function(data, status) {
-                    // marker ekleyecek fonksiyon
-                    //map.addMarker(data)
-                    map.addMarker(data)
-
-
-
-                    //data isimli objeyi kullanabilirsin
-                });
-            <?php  } ?>
-            /*const {
-                location,
-                personName,
-                gw_name
-            } = data*/
-        }, 5000);
+    var draw_floor_0 = L.tileLayer(osmUrl, {
+        maxZoom: 19,
+        attribution: osmAttrib
     });
 
-    /*
-    var customPopup = "<b>My office</b><br/><img src='http://netdna.webdesignerdepot.com/uploads/2014/05/workspace_06_previo.jpg' alt='maptime logo gif' width='150px'/>";
+    var map = new L.Map('map', {
+        center: new L.LatLng(40.9194102, 29.315826),
+        zoom: 30,
+        layers: [
+            draw_floor_0
+        ]
+    });
+    var layer_floor_0 = L.featureGroup().addTo(map);
+    var marker_floor_0 = L.featureGroup().addTo(map);
+    markers = L.layerGroup()
+    drawMap();
+    var baseLayers = {
+        "Zemin": layer_floor_0.addLayer(draw_floor_0),
+    };
+    var overlays = {
+        "Zemin": marker_floor_0,
+    };
+    L.control.layers(baseLayers, overlays, {
+        position: 'topleft',
+        collapsed: false
+    }).addTo(map);
 
-    // specify popup options
-    var customOptions =
-        {
-            'maxWidth': '400',
-            'width': '200',
-            'className' : 'popupCustom'
-        }*/
+    //---------------------------------------------
+    function drawMap() {
+        // burada da bayağı bir şey dönüyor. loglayarak ne nedir bulnuabilir yada konuşabiirz üerinde.
+        var data = RealTimePage.osm2geojson(RealTimePage.xml)
+        var geoJsonLayer = L.geoJson(data, {
+            style: (feature) => {
+                var color = feature.properties.color
+                return {
+                    color: '#' + color,
+                    fill: '#' + color,
+                    fillOpacity: 1,
+                    opacity: 1
+                }
+            },
+            filter: (feature, layer) => (
+                (feature.geometry.type === 'LineString' && typeof feature.geometry.coordinates !== 'undefined' && feature.geometry.coordinates.length >= 3 && typeof feature.geometry.type !== 'undefined')),
+            onEachFeature: (feature, layer) => {
+                layer.on({
+                    //click: () => alert(feature.properties.id), //tıklayınca id
+                })
+            }
+        });
+        geoJsonLayer.addTo(layer_floor_0);
+    };
+
+    function getjson(xmlfile) {
+        return $.getJSON({
+            url: xmlfile,
+            async: false
+        }).responseJSON;
+    };
+
+    function addMarker(data) {
+        const {
+            location,
+            lat,
+            lng,
+            personName,
+            gw_name
+        } = data
+
+        console.log(data);
+        // lokasyonu da parçaladım. keyfine bağlı nasıl kullanacağın.
+        //const parsedLocation = location.split('#')
+        //const lat = parsedLocation[0]
+        //const lng = parsedLocation[1]
+        // şuan bulunan markerler içerisinde ada göre arama yapıyorum. ad şimdilik eşsiz değer olarak kullanılıyor. başka daha mantıklı bir eşsiz değer kullanılabilir.
+        let isExist = markers.getLayers().find((layer) => layer.options.name == personName)
+        // bu eşsiz değere sahip layer bulunuyorsa ve bu eşsiz değere sahip layerden lat lnglerden biri değişmiş ise if true döner
+        if (isExist && (isExist._latlng.lat != lat || isExist._latlng.lng != lng)) {
+            // bu durumda bu layerin konumunu güncelleriz
+            isExist.setLatLng(new L.LatLng(lat, lng))
+        } else if (!isExist) {
+            // eğer layer hiç mapa eklenmemişse yeni bir layer(marker) eklenir
+            var marker = new L.Marker([lat, lng], {
+                name: personName //identifer olarak kullanıyorum. daha mantıklı eşsiz bir değişken kullanılabilir
+            }).bindPopup(personName + ' - ' + gw_name).addTo(marker_floor_0)
+            markers.addTo(marker_floor_0)
+            marker.openPopup();
+        }
+    };
+
+    jQuery(document).ready(function($) {
+        RealTimePage.load();
+        const map = new Map();
+        setInterval(function() {
+            //map.addMarker({'location':'40.9194102, 29.315826','personName':'test','gw_name':'GW NAME'});
+            $.get("<?php echo base_url('livemap/get_last_device_info'); ?>", function(data, status) {
+                // marker ekleyecek fonksiyon
+                for (var k in data) {
+                    //console.log(data);
+                    addMarker(data[k]);
+                }
+            });
+        }, 10000);
+    });
 </script>

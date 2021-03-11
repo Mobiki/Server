@@ -38,7 +38,6 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url("assets/js/jquery-3.3.1.js"); ?>"></script>
 
 <script type="text/javascript" language="javascript">
-
     var datatableObj = [];
     var Marker = [];
 
@@ -505,29 +504,26 @@
 
         setInterval(function() {
 
-            //map.addMarker({'location':'40.9194102#29.315826','personName':'test','gw_name':'GW NAME'});
+            $.get("<?php echo base_url('livemap/get_last_device_info'); ?>", function(data, status) {
+                // marker ekleyecek fonksiyon
+                //map.addMarker(data)
+                for (var k in data) {
+                    //console.log(data[k]);
 
-            <?php foreach ($devices as $key => $dvalue) { ?>
-
-                $.get("<?php echo base_url('livemap/getLastDeviceInfo?mac=' . $dvalue["mac"]); ?>", function(data, status) {
-                    // marker ekleyecek fonksiyon
-                    //map.addMarker(data)
-                    var timedif = <?php echo time(); ?> - data.epoch;
+                    var timedif = <?php echo time(); ?> - data[k].epoch;
                     if (timedif < 30) {
-                        map.addMarker(data)
+                        map.addMarker(data[k]);
                     }
-                    //console.log(timedif+" "+data.personName);
+                }
+                //data isimli objeyi kullanabilirsin
+            });
 
-
-                    //data isimli objeyi kullanabilirsin
-                });
-            <?php  } ?>
             /*const {
                 location,
                 personName,
                 gw_name
             } = data*/
-        }, 5000);
+        }, 10000);
     });
 
     /*

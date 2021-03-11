@@ -64,8 +64,6 @@
     </div>
 </div>
 
-
-
 <div class="modal fade bd-modal-lg" id="addAlertModal" tabindex="-1" role="dialog" aria-labelledby="addAlertModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -76,7 +74,7 @@
                 </button>
             </div>
             <div class="modal-body" id="addmodalbody">
-                <form id="form_edit" action="alert/add" method="post">
+                <form id="form_edit" action="<?php echo base_url("alert/add"); ?>" method="post">
                     <input type="hidden" id="eid" name="id" value="" />
                     <div class="row">
                         <div class="col-6">

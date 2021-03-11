@@ -12,6 +12,8 @@ class Alert extends CI_Controller
         $this->load->model("Devices_model");
         $this->load->model("Users_model");
         $this->load->model("Gateways_model");
+        $this->load->model("Personnel_model");
+        $this->load->model("Assets_model");
     }
 
     public function redis()
@@ -39,6 +41,27 @@ class Alert extends CI_Controller
             'devices_type' => $devices_type,
         );
         $this->load->view("alert", $data);
+    }
+
+    public function alert_open_add()
+    {
+        $alert_key = $this->input->get("alert_key");
+        $alert_rules_id = $this->input->get("alert_rules_id");
+        $device_id = $this->input->get("device_id");
+        $gateway_id = $this->input->get("gateway_id");
+        $opened_person_id = $this->input->get("opened_person_id");
+        $open_date = $this->input->get("open_date");
+
+            $data = array(
+                'alert_key' => $alert_key,
+                'alert_rules_id' =>  $alert_rules_id,
+                'device_id' =>  $device_id,
+                'gateway_id' =>  $gateway_id,
+                'opened_person_id' =>  $opened_person_id,
+                'open_date' =>  $open_date,
+                'status' =>  1,
+            );
+            $result = $this->Alert_model->insert_alert_open($data);
     }
 
     public function add()
@@ -135,7 +158,7 @@ class Alert extends CI_Controller
         } else {
             $pageId = 0;
         }
-        
+
         $client = $this->redis();
         $alert_rules = json_decode($client->get("alert_rules"), true);
         $devices = json_decode($client->get("devices"), true);
@@ -258,11 +281,11 @@ class Alert extends CI_Controller
         echo '<td>' . $alert_name . '</td>';
         echo '<td>' . date("d/m H:i:s", $epoch) . '</td>';
         echo '<td>' . $device_name . '</td>';
-        echo '<td><a href="' . $gateway_location . '">' . $gateway_name . '</a></td>';
+        echo '<td>' . $gateway_name . '</td>';
         if ($pageId != "1") {
             echo '<td>';
             echo '<div class="custom-control custom-switch">'; ?>
-            <input type="checkbox" class="custom-control-input" onClick="$('#stopalarm').load('alert/suspend_alert?alert_key=<?php echo $alert_key; ?>&alert_rules_id=<?php echo $alert_id; ?>&device_id=<?php echo $device_id; ?>&gateway_id=<?php echo $gateway_id; ?>');" id="cs<?php echo $epoch; ?>" />
+            <input type="checkbox" class="custom-control-input" onClick="$.get('<?php echo base_url('alert/suspend_alert'); ?>?alert_key=<?php echo $alert_key; ?>&alert_rules_id=<?php echo $alert_id; ?>&device_id=<?php echo $device_id; ?>&gateway_id=<?php echo $gateway_id; ?>');" id="cs<?php echo $epoch; ?>" />
         <?php
                     echo '<label class="custom-control-label" for="cs' . $epoch . '"> Suspend Alarm</label>';
                     echo '</div>';
@@ -334,168 +357,202 @@ class Alert extends CI_Controller
                     echo '<td>' . $user_name . '</td>';
                     echo '<td>'; ?>
             <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" onClick="$('#stopalarm').load('alert/close_alert?alert_key=<?php echo $alert_key; ?>&alert_log_id=<?php echo $alert_log_id; ?>');" id="css<?php echo $alert_log_id; ?>"><?php
-                                                                                                                                                                                                                                                        echo '<label class="custom-control-label" for="css' . $alert_log_id . '"> Close</label>';
-                                                                                                                                                                                                                                                        echo '</div>';
-                                                                                                                                                                                                                                                        echo '</td>';
-                                                                                                                                                                                                                                                        echo '</tr>';
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                }
+                <input type="checkbox" class="custom-control-input" onClick="$.get('<?php echo base_url("alert/close_alert"); ?>?alert_key=<?php echo $alert_key; ?>&alert_log_id=<?php echo $alert_log_id; ?>');" id="css<?php echo $alert_log_id; ?>">
+        <?php echo '<label class="custom-control-label" for="css' . $alert_log_id . '"> Close</label>';
+                    echo '</div>';
+                    echo '</td>';
+                    echo '</tr>';
+                }
+            }
 
-                                                                                                                                                                                                                                                public function get_all_closed_alerts()
-                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                    $close_alerts = $this->Alert_model->get_all_closed_alerts();
-                                                                                                                                                                                                                                                    $alert_rules = $this->Alert_model->get_all_alert_rules();
-                                                                                                                                                                                                                                                    $users = $this->Users_model->get_all();
-                                                                                                                                                                                                                                                    $devices = $this->Devices_model->get_all();
-                                                                                                                                                                                                                                                    $personnel = $this->Personnel_model->get_all();
-                                                                                                                                                                                                                                                    $assets = $this->Assets_model->get_all();
-                                                                                                                                                                                                                                                    $gateways = $this->Gateways_model->get_all();
-                                                                                                                                                                                                                                                    foreach ($close_alerts as $key => $close_alert) {
-                                                                                                                                                                                                                                                        $alert_log_id = $close_alert["id"];
-                                                                                                                                                                                                                                                        $alert_key = $close_alert["alert_key"];
-                                                                                                                                                                                                                                                        $alert_rules_id = $close_alert["alert_rules_id"];
-                                                                                                                                                                                                                                                        $device_id = $close_alert["device_id"];
-                                                                                                                                                                                                                                                        $gateway_id = $close_alert["gateway_id"];
-                                                                                                                                                                                                                                                        $closed_user_id = $close_alert["closed_user_id"];
-                                                                                                                                                                                                                                                        $close_date = $close_alert["close_date"];
-                                                                                                                                                                                                                                                        $user_name = "";
-                                                                                                                                                                                                                                                        $alert_name = "";
-                                                                                                                                                                                                                                                        $device_name = "";
-                                                                                                                                                                                                                                                        $personnel_name = "";
-                                                                                                                                                                                                                                                        $asset_name = "";
-                                                                                                                                                                                                                                                        $gateway_name = "";
-                                                                                                                                                                                                                                                        foreach ($users as $key => $user) {
-                                                                                                                                                                                                                                                            if ($close_alert["closed_user_id"] == $user["id"]) {
-                                                                                                                                                                                                                                                                $user_name = $user["name"];
-                                                                                                                                                                                                                                                                break;
-                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                        foreach ($alert_rules as $key => $alert_rule) {
-                                                                                                                                                                                                                                                            if ($alert_rule["id"] == $alert_rules_id) {
-                                                                                                                                                                                                                                                                $alert_name = $alert_rule["name"];
-                                                                                                                                                                                                                                                                break;
-                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                        foreach ($devices as $key => $device) {
-                                                                                                                                                                                                                                                            if ($device["id"] == $device_id) {
-                                                                                                                                                                                                                                                                $device_type = $device["type_id"];
-                                                                                                                                                                                                                                                                $device_name = $device["name"];
-                                                                                                                                                                                                                                                                break;
-                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                        foreach ($gateways as $gateways_key => $gateway) {
-                                                                                                                                                                                                                                                            if ($gateway["id"] == $gateway_id) {
-                                                                                                                                                                                                                                                                $gateway_name = $gateway["name"];
-                                                                                                                                                                                                                                                                $gateway_location = $gateway["lat"] . ", " . $gateway["lng"];
-                                                                                                                                                                                                                                                                break;
-                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                        echo '<tr>';
-                                                                                                                                                                                                                                                        echo '<td>' . $alert_name . "</td>";
-                                                                                                                                                                                                                                                        echo '<td>' . $close_date . '</td>';
-                                                                                                                                                                                                                                                        echo '<td>' . $device_name . '</td>';
-                                                                                                                                                                                                                                                        echo '<td>' . $gateway_name . '</td>';
-                                                                                                                                                                                                                                                        echo '<td>' . $user_name . '</td>';
-                                                                                                                                                                                                                                                        echo '<td> Closed </td>';
-                                                                                                                                                                                                                                                        echo '</tr>';
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                }
+            public function get_all_closed_alerts()
+            {
+                $close_alerts = $this->Alert_model->get_all_closed_alerts();
+                $alert_rules = $this->Alert_model->get_all_alert_rules();
+                $users = $this->Users_model->get_all();
+                $devices = $this->Devices_model->get_all();
+                $personnel = $this->Personnel_model->get_all();
+                $assets = $this->Assets_model->get_all();
+                $gateways = $this->Gateways_model->get_all();
+                
+                foreach ($close_alerts as $key => $close_alert) {
+                    $alert_log_id = $close_alert["id"];
+                    $alert_key = $close_alert["alert_key"];
+                    $alert_rules_id = $close_alert["alert_rules_id"];
+                    $device_id = $close_alert["device_id"];
+                    $gateway_id = $close_alert["gateway_id"];
+                    $closed_user_id = $close_alert["closed_user_id"];
+                    $close_date = $close_alert["close_date"];
+                    $user_name = "";
+                    $alert_name = "";
+                    $device_name = "";
+                    $personnel_name = "";
+                    $asset_name = "";
+                    $gateway_name = "";
+                    foreach ($users as $key => $user) {
+                        if ($close_alert["closed_user_id"] == $user["id"]) {
+                            $user_name = $user["name"];
+                            break;
+                        }
+                    }
+                    foreach ($alert_rules as $key => $alert_rule) {
+                        if ($alert_rule["id"] == $alert_rules_id) {
+                            $alert_name = $alert_rule["name"];
+                            break;
+                        }
+                    }
+                    foreach ($devices as $key => $device) {
+                        if ($device["id"] == $device_id) {
+                            $device_type = $device["type_id"];
+                            $device_name = $device["name"];
+                            break;
+                        }
+                    }
+                    foreach ($gateways as $gateways_key => $gateway) {
+                        if ($gateway["id"] == $gateway_id) {
+                            $gateway_name = $gateway["name"];
+                            $gateway_location = $gateway["lat"] . ", " . $gateway["lng"];
+                            break;
+                        }
+                    }
+                    echo '<tr>';
+                    echo '<td>' . $alert_name . "</td>";
+                    echo '<td>' . $close_date . '</td>';
+                    echo '<td>' . $device_name . '</td>';
+                    echo '<td>' . $gateway_name . '</td>';
+                    echo '<td>' . $user_name . '</td>';
+                    echo '<td> Closed </td>';
+                    echo '</tr>';
+                }
+            }
 
+            public function suspend_alert()
+            {
+                $client = $this->redis();
 
+                $user_data = $this->session->userdata('userdata');
 
+                $alert_key = $this->input->get("alert_key");
 
+                if ($user_data["id"] != 0 && $user_data["id"] != "") {
+                    $data = array(
+                        'alert_key' => $this->input->get("alert_key"),
+                        'alert_rules_id' => $this->input->get("alert_rules_id"),
+                        'device_id' => $this->input->get("device_id"),
+                        'gateway_id' => $this->input->get("gateway_id"),
+                        'suspended_user_id' => $user_data["id"],
+                        'suspend_date' => date('Y-m-d H:i:s'),
+                        'status' => 2,
+                    );
 
+                    $this->Alert_model->insert_alert_log($data);
 
+                    $lightinfo = json_decode($client->get($alert_key), true);
+                    $lightinfo["status"] = 2;
+                    $lightsuspend = json_encode($lightinfo);
+                    $client->set($alert_key, $lightsuspend);
+                }
+            }
 
+            public function close_alert()
+            {
+                $client = $this->redis();
+                $alert_log_id = $this->input->get("alert_log_id");
+                $alert_key = $this->input->get("alert_key");
 
+                $user_data = $this->session->userdata('userdata');
+                //if ($user_data["id"] != 0 && $user_data["id"] != "") {
+                $data = array(
+                    'closed_user_id' => $user_data["id"],
+                    'close_date' => date('Y-m-d H:i:s'),
+                    'status' => 3,
+                );
+                $this->Alert_model->alert_close($alert_log_id, $data);
+                $client->del($alert_key);
+                //}
+            }
 
+            public function get_logs()
+            {
+                $device_id = $this->input->get("device_id");
+                $gatewey_id = $this->input->get("gatewey_id");
+                $user_id = $this->input->get("user_id");
 
+                $start = $this->input->get("sDate");
+                $finish = $this->input->get("fDate");
+                $result = $this->Alert_model->get_alert_logs_where($device_id, $gatewey_id, $user_id, $start, $finish);
+                print_r($result);
+            }
 
+            public function widget()
+            {
+                $this->load->view("alert_widget");
+            }
 
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                                                                                                public function suspend_alert()
-                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                    $client = $this->redis();
-
-                                                                                                                                                                                                                                                    $user_data = $this->session->userdata('userdata');
-
-                                                                                                                                                                                                                                                    $alert_key = $this->input->get("alert_key");
-
-                                                                                                                                                                                                                                                    if ($user_data["id"] != 0 && $user_data["id"] != "") {
-                                                                                                                                                                                                                                                        $data = array(
-                                                                                                                                                                                                                                                            'alert_rules_id' => $this->input->get("alert_rules_id"),
-                                                                                                                                                                                                                                                            'device_id' => $this->input->get("device_id"),
-                                                                                                                                                                                                                                                            'gateway_id' => $this->input->get("gateway_id"),
-                                                                                                                                                                                                                                                            'suspended_user_id' => $user_data["id"],
-                                                                                                                                                                                                                                                            'suspend_date' => date('Y-m-d H:i:s'),
-                                                                                                                                                                                                                                                            'status' => 2,
-                                                                                                                                                                                                                                                        );
-
-                                                                                                                                                                                                                                                        $this->Alert_model->insert_alert_log($data);
-
-                                                                                                                                                                                                                                                        $lightinfo = json_decode($client->get($alert_key), true);
-                                                                                                                                                                                                                                                        $lightinfo["status"] = 2;
-                                                                                                                                                                                                                                                        $lightsuspend = json_encode($lightinfo);
-                                                                                                                                                                                                                                                        $client->set($alert_key, $lightsuspend);
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                                public function close_alert()
-                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                    $client = $this->redis();
-                                                                                                                                                                                                                                                    $alert_log_id = $this->input->get("alert_log_id");
-                                                                                                                                                                                                                                                    $alert_key = $this->input->get("alert_key");
-
-                                                                                                                                                                                                                                                    $user_data = $this->session->userdata('userdata');
-                                                                                                                                                                                                                                                    //if ($user_data["id"] != 0 && $user_data["id"] != "") {
-                                                                                                                                                                                                                                                    $data = array(
-                                                                                                                                                                                                                                                        'closed_user_id' => $user_data["id"],
-                                                                                                                                                                                                                                                        'close_date' => date('Y-m-d H:i:s'),
-                                                                                                                                                                                                                                                        'status' => 3,
-                                                                                                                                                                                                                                                    );
-                                                                                                                                                                                                                                                    $this->Alert_model->alert_close($alert_log_id, $data);
-                                                                                                                                                                                                                                                    $client->del($alert_key);
-                                                                                                                                                                                                                                                    //}
-                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                                public function get_logs()
-                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                    $device_id = $this->input->get("device_id");
-                                                                                                                                                                                                                                                    $gatewey_id = $this->input->get("gatewey_id");
-                                                                                                                                                                                                                                                    $user_id = $this->input->get("user_id");
-
-                                                                                                                                                                                                                                                    $start = $this->input->get("sDate");
-                                                                                                                                                                                                                                                    $finish = $this->input->get("fDate");
+            public function alerts()
+            {
+                $alert_logs = $this->Alert_model->get_all_alert_logs();
 
 
+                
 
-                                                                                                                                                                                                                                                    $result = $this->Alert_model->get_alert_logs_where($device_id, $gatewey_id, $user_id, $start, $finish);
+                $data = array(
+                    'pageId' => '10.2',
+                    'pageName' => 'Alerts',
+                    'alert_logs' => $alert_logs,
+                );
+                $this->load->view("alerts", $data);
+            }
 
-                                                                                                                                                                                                                                                    print_r($result);
-                                                                                                                                                                                                                                                }
+            public function sub()
+            {
+                $client = new Predis\Client([
+                    'scheme' => $this->config->item('redis_scheme'),
+                    'host'   => $this->config->item('redis_host'),
+                    'port'   => $this->config->item('redis_port'),
+                    'password' => $this->config->item('redis_auth'),
+                    //'read_write_timeout' => 0,
+                ]);
 
-                                                                                                                                                                                                                                                public function widget()
-                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                    $this->load->view("alert_widget");
-                                                                                                                                                                                                                                                }
+                //$client = new Predis\Client($single_server + array('read_write_timeout' => 0));
+                // Initialize a new pubsub consumer.
+                $pubsub = $client->pubSubLoop();
 
-                                                                                                                                                                                                                                                public function alerts()
-                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                    $data = array(
-                                                                                                                                                                                                                                                        'pageId' => '10.2',
-                                                                                                                                                                                                                                                        'pageName' => 'Alerts',
-                                                                                                                                                                                                                                                    );
+                // Subscribe to your channels
+                $pubsub->subscribe('gateways');
 
-                                                                                                                                                                                                                                                    $this->load->view("alerts", $data);
-                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                            }
+                // Start processing the pubsup messages. Open a terminal and use redis-cli
+                // to push messages to the channels. Examples:
+                //   ./redis-cli PUBLISH notifications "this is a test"
+                //   ./redis-cli PUBLISH control_channel quit_loop
+                foreach ($pubsub as $message) {
+                    switch ($message->kind) {
+                        case 'subscribe':
+                            echo "Subscribed to {$message->channel}", PHP_EOL;
+                            break;
+
+                        case 'message':
+                            if ($message->channel == 'control_channel') {
+                                if ($message->payload == 'quit_loop') {
+                                    echo 'Aborting pubsub loop...', PHP_EOL;
+                                    $pubsub->unsubscribe();
+                                } else {
+                                    echo "Received an unrecognized command: {$message->payload}.", PHP_EOL;
+                                }
+                            } else {
+                                echo "Received the following message from {$message->channel}:",
+                                    PHP_EOL,
+                                    "  {$message->payload}",
+                                    PHP_EOL,
+                                    PHP_EOL;
+                            }
+                            break;
+                    }
+                }
+
+                // Always unset the pubsub consumer instance when you are done! The
+                // class destructor will take care of cleanups and prevent protocol
+                // desynchronizations between the client and the server.
+                unset($pubsub);
+            }
+        }

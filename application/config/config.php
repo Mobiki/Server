@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'http://localhost/rtls/';
-//$config['base_url'] = 'http://rtls.mobiki.in/';
+//$config['base_url'] = 'https://rtls.mobiki.in/';
 
 /*
 |--------------------------------------------------------------------------

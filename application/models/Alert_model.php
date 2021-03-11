@@ -46,10 +46,6 @@ class Alert_model extends CI_Model
         return $this->db->delete($this->alert_rules);
     }
 
-
-
-
-
     //alert_logs
     public function get_all_alert_logs()
     {
@@ -69,16 +65,12 @@ class Alert_model extends CI_Model
             ->result_array();
     }
 
-
-
     public function insert_alert_log($data)
     {
-        return $this->db->insert($this->alert_logs, $data);
+        $this->db->where("alert_key",$data["alert_key"]);
+        $this->db->where("alert_rules_id",$data["alert_rules_id"]);
+        return $this->db->update($this->alert_logs, $data);
     }
-
-
-
-
 
     public function alert_close($id, $data)
     {
@@ -107,5 +99,10 @@ class Alert_model extends CI_Model
         $this->db->where($where);
         return $this->db->get($this->alert_logs)->result_array();
         //->result();
+    }
+
+    public function insert_alert_open($data)
+    {
+        return $this->db->insert($this->alert_logs, $data);
     }
 }

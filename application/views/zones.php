@@ -160,7 +160,7 @@
 
     function btn_edit(id) {
         $('#modal_title').html("Edit Zone");
-        $('#btn_zone_edit').html("Edit Zone");
+        $('#btn_zone_edit').html("Save");
 
         $('#delet_zone').show();
         $('#did').val(id);

@@ -17,13 +17,23 @@
                             <td>Gateway Name</td>
                             <td>Location</td>
                             <td>Description</td>
+                            <td>Type</td>
                             <td>Zone Name</td>
+                            <td>Config</td>
                             <td>Edit</td>
                         </tr>
                     </thead>
                     <tbody id="gateways">
                         <?php
                         foreach (@$gateways as $key => $value) {
+                            $gateway_type_name ="";
+                            $gateway_type_id ="";
+                            foreach ($gateway_types as $gtkey => $gateway_type) {
+                                if ($gateway_type["id"]==$value["type"]) {
+                                    $gateway_type_name=$gateway_type["name"];
+                                    $gateway_type_id=$gateway_type["id"];
+                                }
+                            }
                             if (@$value["zone_id"] == 0) {
                                 $zone_name = "";
                             } else {
@@ -49,12 +59,14 @@
                             echo "<td>" . @$value["name"] . "</td>";
                             echo "<td>" . @$value["lat"] . "," . @$value["lng"] . "</td>";
                             echo "<td>" . @$value["description"] . "</td>";
+                            echo "<td>" . @$gateway_type_name . "</td>";
                             if (@$zone_name == "") {
                                 echo "<td style='background-color: red;'>";
                             } else {
                                 echo "<td>";
                             }
                             echo @$zone_name . "</td>";
+                            echo "<td>" ."<a href='gateways/config?mac=".@$value["mac"]."' type='button' class='btn btn-warning btn-sm'>Config</a>". "</td>";
                             echo "<td>" . "<button type='button' 
                             data-toggle='modal' 
                             data-target='#addGatewayModal' 
@@ -64,6 +76,7 @@
                             data-lat='" . @$value["lat"] . "' 
                             data-lng='" . @$value["lng"] . "' 
                             data-zone_id='" . @$value["zone_id"] . "' 
+                            data-gateway_type_id='" . @$gateway_type_id . "' 
                             data-description='" . @$value["description"] . "' 
                             data-status='" . $value["status"] . "' 
                             class='btn btn-success btn-sm'>Edit</button>" . "</td>";
@@ -87,12 +100,12 @@
                 </button>
             </div>
             <div class="modal-body" id="addmodalbody">
-                <form id="form_edit" action="gateways/add" method="post">
+                <form id="form_edit" action="<?php echo base_url("gateways/add"); ?>" method="post">
                     <input type="hidden" id="eid" name="id" value="" />
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="mac">Gateway SN</label>
+                                <label for="mac">Gateway Serial Number</label>
                                 <input type="text" class="form-control" id="emac" name="mac" placeholder="">
                             </div>
                         </div>
@@ -118,13 +131,27 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="form-group">
                                 <label for="description">Description</label>
                                 <input type="text" class="form-control" id="edescription" name="description" placeholder="">
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="gateway_type_id">Type</label>
+                                <?php if (count($gateway_types) > 0) { ?>
+                                    <select class="form-control" id="egateway_type_id" name="gateway_type_id">
+                                        <?php foreach ($gateway_types as $key => $gateway_type) {  ?>
+                                            <option value="<?php echo $gateway_type["id"]; ?>"><?php echo $gateway_type["name"]; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                <?php } else { ?>
+                                    <p> <a href="type">Click to add a type.</a></p>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <div class="col-4">
                             <div class="form-group">
                                 <label for="zone_id">Zone</label>
                                 <?php if (count($zones) > 0) { ?>
@@ -143,8 +170,8 @@
                         <div class="col-6">
                             <div class="custom-control custom-switch">
                                 <input type="hidden" id="estatus" name="status" value="" />
-                                <input type="checkbox" class="custom-control-input" id="ecstatus" name="cstatus" checked/>
-                                <label class="custom-control-label" for="status">Active</label>
+                                <input type="checkbox" class="custom-control-input" id="ecstatus" name="cstatus" checked />
+                                <label class="custom-control-label" for="ecstatus">Active</label>
                             </div>
                         </div>
                     </div>
@@ -196,6 +223,7 @@
             $('#elat').val($(this).data('lat'));
             $('#elng').val($(this).data('lng'));
             $('#ezone_id').val($(this).data('zone_id'));
+            $('#egateway_type_id').val($(this).data('gateway_type_id'));
             $('#edescription').val($(this).data('description'));
 
             $('#estatus').val($(this).data('status'));
@@ -206,7 +234,7 @@
                 $('#ecstatus').prop('checked', false);
             }
 
-            $('#btn_gateway_add').html("Edit Gateway");
+            $('#btn_gateway_add').html("Save");
             $('#modal_title').html("Edit Gateway");
             $('#delet_gateway').show();
         });
@@ -224,6 +252,7 @@
         $('#elat').val("");
         $('#elng').val("");
         $('#ezone_id').val(1);
+        $('#egateway_type_id').val(1);
         $('#estatus').val("1");
         $('#ecstatus').prop('checked', true);
         $('#edescription').val("");

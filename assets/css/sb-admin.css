@@ -10526,7 +10526,7 @@ body {
 }
 
 .sidebar .nav-item .nav-link {
-  color: rgba(255, 255, 255, 0.9);/*önemli*/
+  color: rgb(255, 255, 255);/*önemli color: rgb(255, 255, 255, 0.9);*/
 }
 
 .sidebar .nav-item .nav-link:active, .sidebar .nav-item .nav-link:focus, .sidebar .nav-item .nav-link:hover {

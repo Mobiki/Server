@@ -1,10 +1,9 @@
-<?php
-$user_data = $this->session->userdata('userdata');
-?>
+<?php $user_data = $this->session->userdata('userdata'); ?>
+
 <nav class="navbar navbar-expand navbar-dark bg-primary static-top">
 
   <a class="navbar-brand mr-1" href="<?php echo base_url('dashboard'); ?>"><img src="<?php echo base_url('assets/img/mobiki_logo.svg'); ?>" style="width: 150px; margin-top: -80px; margin-bottom: -55px;" /></a>
-  <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" onclick="openNav()" href="#">
+  <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" onclick="sidebar_toggler()" href="#">
     <i class="fas fa-bars"></i>
   </button>
   <a class="navbar-brand ml-10" href="#"></a>
@@ -15,7 +14,7 @@ $user_data = $this->session->userdata('userdata');
         <a class="nav-link" href="#"><?php echo @$pageName; ?> <span class="sr-only">(current)</span></a>
       </li>
 
-<!--
+      <!--
       <li class="nav-item">
         <a class="nav-link" href="#">Link </a>
       </li>
@@ -35,7 +34,7 @@ $user_data = $this->session->userdata('userdata');
   </div>
 
   <a class="nav-link" style="padding-bottom: 0px;" href="<?php echo base_url('livemap') ?>"><i class="fas fa-fw fa-map"></i></a>
-  
+
   <ul class="navbar-nav ml-auto ml-md-0">
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" style="color: white;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -49,9 +48,14 @@ $user_data = $this->session->userdata('userdata');
       </div>
     </li>
   </ul>
+
 </nav>
 <script>
-  function openNav() {
-    $('.sidebar').removeClass('sidebar navbar-nav toggled').addClass('sidebar navbar-nav');
+  function sidebar_toggler() {
+    if ($("#sidebar").hasClass("toggled")) {
+      $('#sidebar').addClass('toggled');
+    } else {
+      $('#sidebar').removeClass('toggled');
+    }
   };
 </script>

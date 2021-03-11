@@ -17,7 +17,6 @@
     </div>
 </div>
 
-
 <div class="modal fade bd-modal-lg" tabindex="-1" role="dialog" id="addDepartmentModal" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -28,7 +27,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form_edit" action="departments/add" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+                <form id="form_edit" action="<?php echo base_url("departments/add"); ?>" enctype="multipart/form-data" method="post" accept-charset="utf-8">
                     <input type="hidden" id="eid" name="id" value="" />
                     <div class="row">
                         <div class="col-6">
@@ -57,7 +56,6 @@
                             </div>
                         </div>
                     </div>
-
                     <hr>
                     <div class="row">
                         <div class="col-12">
@@ -74,22 +72,16 @@
                         <form action="departments/delete" method="post">
                             <input type="hidden" id="did" name="id" value="" />
                             <button type="submit" class="btn btn-danger">Delete Department</button>
-
                         </form>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
-
-
 <?php $this->load->view('layout/down') ?>
 <script type="text/javascript" charset="utf8" src="<?php echo base_url("assets/js/bootstrap-treeview.min.js"); ?>"></script>
-
-
 
 <script>
     $('#btn_add_department').on("click", function() {
@@ -105,14 +97,11 @@
         $('#delet_department').hide();
     });
 
-
     function btn_edit(id) {
         $('#modal_title').html("Edit Departments");
         $('#btn_department_add').html("Edit Departments");
-
         $('#delet_department').show();
         $('#did').val(id);
-
         //get json
         $.getJSON('<?php echo base_url("departments/get_by_id?id="); ?>' + id, function(data) {
             $('#eid').val(id);
@@ -120,16 +109,13 @@
             $('#eparent_id').val(data.parent_id);
             $('#eexpiry_date').val(data.expiry_date);
         });
-
         $('#form_edit').attr('action', '<?php echo base_url("departments/edit"); ?>');
         console.log(id);
         $('#addDepartmentModal').modal('show');
     }
 
     $(document).ready(function() {
-
         var treeData;
-
         $.ajax({
             type: "GET",
             url: "<?php echo base_url("departments/treeview"); ?>",
@@ -151,14 +137,12 @@
 
 <?php
 /*foreach (@$departments as $key => $value) {
-
     if ($value["parent_id"] == 0) {
         echo $value["name"] . " || <br>";
         h($departments, $value["name"], $value["id"], $value["parent_id"]);
         echo " <br>";
     }
 }
-
 function h($departments, $name, $id, $pid)
 {
     $a = 0;
@@ -166,8 +150,6 @@ function h($departments, $name, $id, $pid)
         $a = $a + 1;
         $z = "";
         if ($value["parent_id"] == $id) {
-
-
             for ($i = 0; $i < $a; $i++) {
                 $z = $z . "-";
             }

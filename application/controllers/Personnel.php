@@ -13,10 +13,12 @@ class Personnel extends CI_Controller
 
         $this->load->model("Departments_model");
         $this->load->model("Devices_model");
+        $this->load->model("Zones_model");
+        $this->load->model("Company_model");
 
         $this->load->helper(array('form', 'url'));
     }
-    
+
     public function redis()
     {
         $client = new Predis\Client([
@@ -36,6 +38,8 @@ class Personnel extends CI_Controller
         $departments = $this->Departments_model->get_all();
 
         $devices = $this->Devices_model->get_all();
+        $zones = $this->Zones_model->get_all();
+        $work_shifts = $this->Company_model->get_all_work_shifts();
         $device_type = $this->Devices_model->get_all_device_type();
 
         $data = array(
@@ -44,6 +48,8 @@ class Personnel extends CI_Controller
             'personnel' => $personnel,
             'personnel_type' => $personnel_type,
             'departments' => $departments,
+            'zones' => $zones,
+            'work_shifts' => $work_shifts,
             'devices' => $devices,
             'devices_type' => $device_type,
         );
@@ -68,6 +74,8 @@ class Personnel extends CI_Controller
                 'email' => $this->input->post('email', true),
                 'type_id' => $this->input->post('type_id', true),
                 'department_id' => $this->input->post('department_id', true),
+                'zone_id' => $this->input->post('zone_id', true),
+                'work_shift_id' => $this->input->post('work_shift_id', true),
                 'device_id' => $this->input->post('device_id', true),
                 'status' => "1",
                 //'error' => $this->upload->display_errors()
@@ -80,6 +88,8 @@ class Personnel extends CI_Controller
                 'email' => $this->input->post('email', true),
                 'type_id' => $this->input->post('type_id', true),
                 'department_id' => $this->input->post('department_id', true),
+                'zone_id' => $this->input->post('zone_id', true),
+                'work_shift_id' => $this->input->post('work_shift_id', true),
                 'device_id' => $this->input->post('device_id', true),
                 'status' => "1",
                 //'upload_data' => $this->upload->data()["file_name"]
@@ -109,6 +119,8 @@ class Personnel extends CI_Controller
                 'email' => $this->input->post('email', true),
                 'type_id' => $this->input->post('type_id', true),
                 'department_id' => $this->input->post('department_id', true),
+                'zone_id' => $this->input->post('zone_id', true),
+                'work_shift_id' => $this->input->post('work_shift_id', true),
                 'device_id' => $this->input->post('device_id', true),
                 'status' => "1",
                 //'error' => $this->upload->display_errors()
@@ -121,6 +133,8 @@ class Personnel extends CI_Controller
                 'email' => $this->input->post('email', true),
                 'type_id' => $this->input->post('type_id', true),
                 'department_id' => $this->input->post('department_id', true),
+                'zone_id' => $this->input->post('zone_id', true),
+                'work_shift_id' => $this->input->post('work_shift_id', true),
                 'device_id' => $this->input->post('device_id', true),
                 'status' => "1",
                 //'upload_data' => $this->upload->data()["file_name"]
@@ -168,7 +182,9 @@ class Personnel extends CI_Controller
         echo '<option value="0">None</option>';
         foreach ($personnel_type as $key => $dtvalue) {
             echo '<option value="' . $dtvalue['id'] . '" ';
-            if($id==$dtvalue['id']){echo " selected ";}
+            if ($id == $dtvalue['id']) {
+                echo " selected ";
+            }
             echo '>' . $dtvalue['name'] . '</option>';
         }
     }
@@ -286,5 +302,55 @@ class Personnel extends CI_Controller
 
         $personnel_type = $this->Personnel_model->get_all_personnel_type();
         $client->set("personnel_type", json_encode($personnel_type));
+    }
+
+
+    public function get_logs()
+    {
+        $client = $this->redis();
+        $personnel = json_decode($client->get("personnel"), true);
+        $devices = json_decode($client->get("devices"), true);
+        $gateways = json_decode($client->get("gateways"), true);
+        $person_id = $this->input->get("person_id");
+
+        foreach ($personnel as $key => $person) {
+            if ($person["id"] == $person_id) {
+                $device_id = $person["device_id"];
+            }
+        }
+
+        foreach ($devices as $key => $device) {
+            if ($device["id"] == $device_id) {
+                $device_mac = $device["mac"];
+            }
+        }
+
+        $data_list = [];
+        $datas = $client->zrange("log:device:card:" . $device_mac, 0, -1);
+        header('Content-Type: application/json');
+        //$logs = preg_replace('/\\\"/',"\"", $logs);
+        foreach ($datas as $key => $data) {
+            $djson = json_decode($data, true);
+            $gateway_name = "";
+            foreach ($gateways as $key => $gateway) {
+                if ($gateway["mac"] == $djson["gateway"]) {
+                    $gateway_name = $gateway["name"];
+                }
+            }
+            $date = date("d/m/Y H:i:s", $djson["epoch"]);
+
+            $djson["gateway_name"] = $gateway_name;
+            $djson["date_time"] = $date;
+            if ($gateway_name!="") {
+                $status="In";
+            } else {
+                $status="Out";
+            }
+            
+            $djson["status"] = $status;
+            array_push($data_list, $djson);
+        }
+
+        echo json_encode($data_list);
     }
 }

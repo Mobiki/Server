@@ -1,10 +1,7 @@
 <div class="col-lg-3 col-md-6 col-sm-12" id="alert_widget_id">
     <div class="card card-stats">
         <div class="card-body" id="alert_body">
-            Alerts <button class="btn btn-outline-warning btn-sm" id="collaps" data-size="12" data-widget_name="alert_widget">_</button>
-            <button class="btn btn-outline-warning btn-sm" id="smaller" data-size="12" data-widget_name="alert_widget">-</button>
-            <button class="btn btn-outline-warning btn-sm" id="bigger" data-size="12" data-widget_name="alert_widget">+</button>
-        </div>
+            <a href="<?php echo base_url("alert/alerts"); ?>">Alerts</a></div>
     </div>
     <div class="card-footer" id="alert_widget_footer" style="padding: 0px;" style="display: block;">
         <div class="row">

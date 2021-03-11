@@ -6,6 +6,7 @@ $user_data = $this->session->userdata('userdata');
 if ($user_data['auth'] == 'auth1') { } else {
     redirect(site_url() . 'login');
 }
+
 ?>
 
 <head>
@@ -24,3 +25,12 @@ if ($user_data['auth'] == 'auth1') { } else {
         }
     </style>
 </head>
+<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+<script>
+  var OneSignal = window.OneSignal || [];
+  OneSignal.push(function() {
+    OneSignal.init({
+      appId: "66ca1742-6b2d-4e81-ab7f-6a5e41eae1ee",
+    });
+  });
+</script>

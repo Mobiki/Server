@@ -164,9 +164,9 @@
     var $this = $(this);
 
     $this.on("click", function() {
-      $('#form_edit').attr('action', 'users/edit');
+      $('#form_edit').attr('action', '<?php echo base_url('users/edit'); ?>');
       $('#modal_title').html("Edit User");
-      $('#btn_user_add').html("Edit User");
+      $('#btn_user_add').html("Save");
       $('#eid').val($(this).data('id'));
       $('#ename').val($(this).data('name'));
       $('#erole_id').val($(this).data('role_id'));
@@ -189,7 +189,7 @@
 
     $('#modal_title').html("Add User");
     $('#btn_user_add').html("Add User");
-    $('#form_edit').attr('action', 'users/add');
+    $('#form_edit').attr('action', '<?php echo base_url('users/add'); ?>');
 
     $('#eid').val("");
     $('#ename').val("");

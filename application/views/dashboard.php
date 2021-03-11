@@ -1,16 +1,23 @@
 <?php $this->load->view('layout/up'); ?>
-
+<style>
+    .zone-card{
+        border: solid;
+        border-color: white;
+    }
+    </style>
 <div class="row">
     <?php $this->load->view("devices_widget"); ?>
+    <?php $this->load->view("zone_widget"); ?>
     <?php $this->load->view("alert_widget"); ?>
+    
 
-    <div class="col-lg-6 col-md-12 col-sm-12">
+    <div class="col-lg-3 col-md-6 col-sm-12">
         <div class="card card-stats">
             <div class="card-body">
                 Live Map
             </div>
             <div class="card-footer">
-                <iframe src="<?php echo base_url('livemap/widget'); ?>" width="100%" height="300px" style="border: 0px"></iframe>
+                <iframe src="<?php echo base_url('widgets/live_map'); ?>" width="100%" height="300px" style="border: 0px"></iframe>
             </div>
         </div>
     </div>

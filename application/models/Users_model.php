@@ -5,7 +5,7 @@ class Users_model extends CI_Model
     protected $table = 'users';
     protected $users_role = 'users_role';
 
-    protected $md5key = '99fc58b970a431cc86aa06e98328249r'; //önemli
+    protected $md5key = '79bc58b970a431cc86aa06e98328227e'; //önemli
 
     function __construct()
     {
@@ -38,7 +38,7 @@ class Users_model extends CI_Model
     public function get_by_id($id)
     {
         $this->db->where('id', $id);
-        return $this->db->get($this->table)->row();
+        return $this->db->get($this->table)->result_array();
     }
 
     public function change_password($id, $password)
